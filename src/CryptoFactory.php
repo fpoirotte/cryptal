@@ -5,7 +5,7 @@ namespace fpoirotte\Cryptal;
 use \fpoirotte\Cryptal\CryptoInterface;
 
 /**
- * A factory to instanciate cryptography implementations.
+ * A factory to instantiate cryptography implementations.
  */
 final class CryptoFactory
 {
