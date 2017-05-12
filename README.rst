@@ -16,11 +16,10 @@ for PHP:
 Although these extensions all provide roughtly the same features,
 the programmatic interface they expose is very different.
 
-This project exists is comprised of a unified API (this package),
-which serves to abstract those differences away, and various packages
-that provide implementations for the unified interface
-(see `https://packagist.org/providers/psr/log-implementation`_ for a list
-of all available implementations).
+This project is comprised of a unified API (this package), which serves
+to abstract those differences away, and various packages that provide
+implementations for the unified interface (see `implementations`_
+for a list of all available implementations).
 
 
 How to use it?
@@ -33,8 +32,7 @@ First, add a requirement in your own project on either:
 
 * Or a specific implementation if you want to precisely control which
   implementation is used.
-  Again, see `https://packagist.org/providers/psr/log-implementation`_
-  for a list of available implementations.
+  Again, see `implementations`_ for a list of available implementations.
 
 Then, whenever you would like to apply some cryptographic operation,
 retrieve an instance of the implementation using the following snippet:
@@ -90,11 +88,12 @@ New implementations MUST be delivered as Composer packages.
 Each such package MUST:
 
 * Provide a concrete implementation for every interface in this package
-* Name the entry point for the implementation (the class that implements
-  the ``\fpoirotte\Cryptal\CryptoInterface`` interface)
-  ``\fpoirotte\Cryptal\Implemenration``.
+* Give the name ``\fpoirotte\Cryptal\Implemenration`` to the entry point
+  (the class that implements the ``\fpoirotte\Cryptal\CryptoInterface``
+  interface).
 * Add ``fpoirotte/cryptal`` to their requirements
 * Add ``fpoirotte/cryptal-implementation`` to their provides
 
 
-
+.. _implementations:
+    https://packagist.org/providers/fpoirotte/cryptal-implementation
