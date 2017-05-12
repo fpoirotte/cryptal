@@ -41,13 +41,8 @@ retrieve an instance of the implementation using the following snippet:
 
     <?php
 
-    // One of the CIPHER_* constants from \fpoirotte\Cryptal\CryptoInterface
-    $cipher = CIPHER_AES;
-
-    // One of the MODE_* constants from \fpoirotte\Cryptal\CryptoInterface
-    $cipher = MODE_CBC;
-
-    $impl = \fpoirotte\Cryptal\CryptoFactory::getImplementation($cipher, mode);
+    use \fpoirotte\Cryptal\Implementation;
+    $impl = new Implementation(Implemenration::CIPHER_AES, Implementation::MODE_CBC);
 
     ?>
 
@@ -87,13 +82,13 @@ How to contribute a new implementation?
 New implementations MUST be delivered as Composer packages.
 Each such package MUST:
 
-* Provide a concrete implementation for every interface in this package
-* Give the name ``\fpoirotte\Cryptal\Implemenration`` to the entry point
-  (the class that implements the ``\fpoirotte\Cryptal\CryptoInterface``
-  interface).
+* Provide a concrete implementation for the ``\fpoirotte\Cryptal\CryptoInterface``
+  interface and name that class  ``\fpoirotte\Cryptal\Implementation``.
 * Add ``fpoirotte/cryptal`` to their requirements
 * Add ``fpoirotte/cryptal-implementation`` to their provides
 
+See https://github.com/fpoirotte/cryptal-mcrypt for an example of how
+this is done.
 
 .. _implementations:
     https://packagist.org/providers/fpoirotte/cryptal-implementation

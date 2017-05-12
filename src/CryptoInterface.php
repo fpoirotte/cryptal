@@ -84,40 +84,51 @@ interface CryptoInterface
     const MODE_XTS = 10;
 
     /**
-     * Returns an array mapping supported ciphers (CIPHER_* constants)
-     * to the internal code for those ciphers (opaque value).
+     * Return a list of supported ciphers (as \c CIPHER_* constants).
      *
      * \retval array
-     *      Mapping between supported ciphers and their internal code.
+     *      A list supported ciphers.
      *
      * \note
-     *      You can test whether a particular cipher is supported
-     *      by this implementation using the following snippet:
+     *      This method can be used to test whether a particular cipher
+     *      is supported by an implementation using the following snippet:
      *
-     *      $supportedCiphers = $impl->getCiphers();
-     *      if (isset($supportedCiphers[CryptoInterface::CIPHER_AES])) {
+     *      $supported = $impl->getSupportedCiphers();
+     *      if (in_array(CryptoInterface::CIPHER_AES, $supported)) {
      *          ...do something...
      *      }
      */
-    public static function getCiphers();
+    public static function getSupportedCiphers();
 
     /**
-     * Returns an array mapping supported modes (MODE_* constants)
-     * to the internal code for those modes (opaque value).
+     * Return a list of supported modes (as \c MODE_* constants)
      *
      * \retval array
-     *      Mapping between supported modes and their internal code.
+     *      A list of supported modes.
      *
      * \note
-     *      You can test whether a particular mode is supported
-     *      by this implementation using the following snippet:
+     *      This method can be used to test whether a particular mode
+     *      is supported by an implementation using the following snippet:
      *
-     *      $supportedModes = $impl->getModes();
-     *      if (isset($supportedModes[CryptoInterface::MODE_CBC])) {
+     *      $supported = $impl->getSupportedModes();
+     *      if (in_array(CryptoInterface::MODE_CTR, $supported)) {
      *          ...do something...
      *      }
      */
-    public static function getModes();
+    public static function getSupportedModes();
+
+    /**
+     * Construct a new encryption/decryption context.
+     *
+     * \param opaque $cipher
+     *      One of the \c CIPHER_* constants from
+     *      fpoirotte\Cryptal\CryptoInterface.
+     *
+     * \param opaque $mode
+     *      One of the \c MODE_* constants from
+     *      fpoirotte\Cryptal\CryptoInterface.
+     */
+    public static function __construct($cipher, $mode);
 
     /**
      * Encrypt some data.
