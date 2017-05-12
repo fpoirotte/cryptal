@@ -44,6 +44,6 @@ final class CryptoFactory
             throw new \Exception('Unsupported cipher/mode combination');
         }
 
-        return new Implementation($cipher, $mode);
+        return new Implementation($ciphers[$cipher], $modes[$mode]);
     }
 }
