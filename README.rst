@@ -88,7 +88,7 @@ Encrypting some data is easy:
 
     <?php
         // Initialize the library (can be called multiple times)
-        \fpoirotte\Cryptal\init();
+        \fpoirotte\Cryptal::init();
 
         // Create an encryption context (see below)
         $ctx = stream_context_create(
@@ -147,7 +147,7 @@ Decryption works pretty must the same way:
 
     <?php
         // Initialize the library (can be called multiple times)
-        \fpoirotte\Cryptal\init();
+        \fpoirotte\Cryptal::init();
 
         // Create a decryption context (see below)
         $ctx = stream_context_create(
@@ -264,7 +264,7 @@ retrieve an instance of the implementation using the following snippet:
     use \fpoirotte\Cryptal\CryptoInterface;
 
     // Initialize the library (can be called multiple times)
-    \fpoirotte\Cryptal\init();
+    \fpoirotte\Cryptal::init();
 
     // Retrieve an instance of the implementation.
     // Use the CIPHER_* & MODE_* constants from the CryptoInterface

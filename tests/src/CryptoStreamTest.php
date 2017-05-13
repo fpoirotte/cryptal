@@ -9,7 +9,7 @@ class CryptoStreamTest extends TestCase
     public function setUp()
     {
         // Initialize the library.
-        \fpoirotte\Cryptal\init();
+        \fpoirotte\Cryptal::init();
         $this->ctx = stream_context_create(
             array(
                 'cryptal' => array(
