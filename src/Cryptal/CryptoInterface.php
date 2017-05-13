@@ -2,6 +2,8 @@
 
 namespace fpoirotte\Cryptal;
 
+use fpoirotte\Cryptal\PaddingInterface;
+
 /**
  * A cryptographic abstraction
  */
@@ -101,23 +103,6 @@ interface CryptoInterface
     public static function getSupportedCiphers();
 
     /**
-     * Return a list of supported modes (as \c MODE_* constants)
-     *
-     * \retval array
-     *      A list of supported modes.
-     *
-     * \note
-     *      This method can be used to test whether a particular mode
-     *      is supported by an implementation using the following snippet:
-     *
-     *      $supported = $impl->getSupportedModes();
-     *      if (in_array(CryptoInterface::MODE_CTR, $supported)) {
-     *          ...do something...
-     *      }
-     */
-    public static function getSupportedModes();
-
-    /**
      * Construct a new encryption/decryption context.
      *
      * \param opaque $cipher
@@ -127,8 +112,20 @@ interface CryptoInterface
      * \param opaque $mode
      *      One of the \c MODE_* constants from
      *      fpoirotte\Cryptal\CryptoInterface.
+     *
+     * \param fpoirotte::Cryptal::PaddingInterface
+     *      Padding scheme to use.
+     *
+     * \param string $tagLength
+     *      Length (in bytes) of the authentication tags to generate.
+     *
+     * \note
+     *      The \a $tagLength parameter is unused unless
+     *      the required mode supports Authenticated Encryption
+     *      with Additional Data (AEAD).
+     *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public static function __construct($cipher, $mode);
+    public function __construct($cipher, $mode, PaddingInterface $padding, $tagLength = 16);
 
     /**
      * Encrypt some data.
@@ -142,28 +139,31 @@ interface CryptoInterface
      * \param string $data
      *      Data to encrypt.
      *
-     * \param string $aad
-     *      Additional authenticated data.
-     *
-     * \param string $tagLength
-     *      Length (in bytes) of the authentication tag to generate.
-     *
      * \param string $tag
      *      Variable where the generated tag will be stored.
+     *
+     * \param string $aad
+     *      Additional authenticated data.
      *
      * \retval string
      *      The ciphertext (encrypted data).
      *
      * \note
+     *      The \a $iv parameter is unused for some modes
+     *      of operations (namely \c MODE_ECB).
+     *      Still, this parameter is mandatory and an empty
+     *      string may be passed for those modes.
+     *
+     * \note
      *      An exception is thrown in case encryption fails.
      *
      * \note
-     *      The \a $aad, \a $tagLength & \a $tag parameters are all unused
-     *      unless the required mode supports Authenticated Encryption
+     *      The \a $aad & \a $tag parameters are unused unless
+     *      the required mode supports Authenticated Encryption
      *      with Additional Data (AEAD).
      *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public function encrypt($iv, $key, $data, $aad = '', $tagLength = null, &$tag = null);
+    public function encrypt($iv, $key, $data, &$tag = null, $aad = '');
 
     /**
      * Decrypt some data.
@@ -180,19 +180,29 @@ interface CryptoInterface
      * \param string $tag
      *      Authentication tag.
      *
+     * \param string $aad
+     *      Additional authenticated data.
+     *
      * \retval string
      *      The ciphertext (encrypted data).
+     *
+     * \note
+     *      The \a $iv parameter is unused for some modes
+     *      of operations (namely \c MODE_ECB).
+     *      Still, this parameter is mandatory and an empty
+     *      string may be passed for those modes.
      *
      * \note
      *      An exception is thrown in case decryption fails,
      *      or the given authentication tag is incorrect (AEAD-only).
      *
      * \note
-     *      The \a $tag parameter is unused unless the required mode supports
-     *      Authenticated Encryption with Additional Data (AEAD).
+     *      The \a $aad & \a $tag parameters are unused unless
+     *      the required mode supports Authenticated Encryption
+     *      with Additional Data (AEAD).
      *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public function decrypt($iv, $key, $data, $tag);
+    public function decrypt($iv, $key, $data, $tag = null, $aad = '');
 
     /**
      * Get the size of the Initialization Vector, in bytes.

@@ -1,3 +1,6 @@
+# Ignore test implementations
+/src/Cryptal/Implementation.php
+
 # Ignore composer's vendor/ dir.
 /vendor
 
