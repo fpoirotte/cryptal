@@ -334,7 +334,8 @@ to an instance of the scheme to use before opening the stream:
         // ...
     ?>
 
-For one-shot encryption/decryption, @TODO.
+For one-shot encryption/decryption, you must explicitly pass the padding
+scheme to use to the implementation's constructor.
 
 
 How to contribute a new implementation?
