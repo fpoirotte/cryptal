@@ -2,7 +2,7 @@
     "prefer-stable": true,
     "name": "fpoirotte/cryptal",
     "description": "Cryptography Abstraction Layer",
-    "keywords": ["crypto", "cryptography", "openssl", "mcrypt"],
+    "keywords": ["cryptal", "crypto", "cryptography", "openssl", "mcrypt"],
     "homepage": "https://github.com/fpoirotte/cryptal",
     "license": "MIT",
     "authors": [
