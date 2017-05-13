@@ -52,6 +52,9 @@ A specific interface is provided for each mode.
 Streaming encryption/decryption
 -------------------------------
 
+For convenience, Cryptal provides stream wrappers to easily encrypt/decrypt
+data on the fly.
+
 ..  warning::
 
     When using streaming encryption/decryption, the library relies mostly
@@ -64,12 +67,9 @@ Streaming encryption/decryption
     cannot be safely erased from memory and may linger there even after
     you are done processing the data.
 
-    If you are concerned about these issues, to not use streaming
+    If you are concerned about these issues, do not use streaming
     encryption/decryption.
 
-
-For convenience, Cryptal provides stream wrappers to easily encrypt/decrypt
-data on the fly.
 
 ..  note::
 
