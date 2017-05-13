@@ -222,7 +222,7 @@ The following table lists available options:
 
     *   - ``padding``
         - Instance of ``\fpoirotte\Cryptal\PaddingInterface``
-        - Padding scheme to use
+        - Padding scheme to use (defaults to PKCS#7 if not specified)
 
     *   - ``tagLength``
         - integer
