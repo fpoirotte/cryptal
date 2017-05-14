@@ -104,23 +104,6 @@ interface CryptoInterface
     const MODE_XTS = 10;
 
     /**
-     * Return a list of supported ciphers (as \c CIPHER_* constants).
-     *
-     * \retval array
-     *      A list supported ciphers.
-     *
-     * \note
-     *      This method can be used to test whether a particular cipher
-     *      is supported by an implementation using the following snippet:
-     *
-     *      $supported = $impl->getSupportedCiphers();
-     *      if (in_array(CryptoInterface::CIPHER_AES, $supported)) {
-     *          ...do something...
-     *      }
-     */
-    public static function getSupportedCiphers();
-
-    /**
      * Construct a new encryption/decryption context.
      *
      * \param opaque $cipher
