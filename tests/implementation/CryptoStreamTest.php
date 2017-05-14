@@ -9,7 +9,11 @@ class CryptoStreamTest extends TestCase
     public function setUp()
     {
         // Initialize the library.
-        \fpoirotte\Cryptal::init();
+        try {
+            \fpoirotte\Cryptal::init();
+        } catch (\Exception $e) {
+            $this->markTestSkipped('No valid implementation found');
+        }
         $this->ctx = stream_context_create(
             array(
                 'cryptal' => array(

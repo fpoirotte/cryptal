@@ -5,7 +5,8 @@
 
   <testsuites>
     <testsuite name="unit">
-      <directory>tests/src/</directory>
+      <directory>tests/implementation/</directory>
+      <directory>tests/api/</directory>
     </testsuite>
   </testsuites>
 
