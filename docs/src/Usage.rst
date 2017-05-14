@@ -199,7 +199,7 @@ The following table lists available options:
 
 To set an option, use ``stream_context_set_option()``:
 
-..  sourcecode::
+..  sourcecode:: php
 
     <?php
         stream_context_set_option($stream_or_context, 'cryptal', $option, $value);
@@ -209,7 +209,7 @@ To set an option, use ``stream_context_set_option()``:
 To retrieve the current value for an option,
 use ``stream_context_get_options()``:
 
-..  sourcecode::
+..  sourcecode:: php
 
     <?php
         $options = stream_context_get_options($stream_or_context);
@@ -278,7 +278,7 @@ If you need to use another padding scheme, you can easily swap the default
 for an alternate implementation. Just set the ``padding`` context option
 to an instance of the scheme to use before opening the stream:
 
-..  sourcecode::
+..  sourcecode:: php
 
     <?php
 
