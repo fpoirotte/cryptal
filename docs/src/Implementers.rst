@@ -23,8 +23,12 @@ Each such package **MUST**:
 *   Add ``fpoirotte/cryptal-implementation`` to the ``provides`` section
     in their :file:`composer.json` file.
 
-See https://github.com/fpoirotte/cryptal-mcrypt for an example of how
-this is done.
+
+Existing implementations
+------------------------
+
+A list of existing implementations is available on
+`Packagist <https://packagist.org/providers/fpoirotte/cryptal-implementation>`_.
 
 .. vim: ts=4 et
 
