@@ -3,12 +3,23 @@
 namespace fpoirotte\Cryptal\CryptoStream;
 
 use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\SymmetricModeInterface;
 
-class CTR
+/**
+ * Counter mode
+ */
+class CTR implements SymmetricModeInterface
 {
+    /// Implementation
     protected $impl;
+
+    /// Secret key
     protected $key;
+
+    /// Counter
     protected $counter;
+
+    /// Cipher block size
     protected $blockSize;
 
     public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
@@ -25,6 +36,7 @@ class CTR
         $this->blockSize    = $blockSize;
     }
 
+    /// Increment the value of the counter by one.
     protected function incrementCounter()
     {
         for ($i = $this->blockSize - 1; $i > 0; $i--) {

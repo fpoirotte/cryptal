@@ -3,11 +3,20 @@
 namespace fpoirotte\Cryptal\CryptoStream;
 
 use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\AsymmetricModeInterface;
 
-class CBC
+/**
+ * Cipher Block Chaining mode
+ */
+class CBC implements AsymmetricModeInterface
 {
+    /// Implementation
     protected $impl;
+
+    /// Secret key
     protected $key;
+
+    /// Initialization Vector
     protected $iv;
 
     public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)

@@ -3,10 +3,17 @@
 namespace fpoirotte\Cryptal\CryptoStream;
 
 use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\AsymmetricModeInterface;
 
-class ECB
+/**
+ * Electronic Codebook mode
+ */
+class ECB implements AsymmetricModeInterface
 {
+    /// Implementation
     protected $impl;
+
+    /// Secret key
     protected $key;
 
     public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)

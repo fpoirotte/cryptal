@@ -3,11 +3,20 @@
 namespace fpoirotte\Cryptal\CryptoStream;
 
 use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\SymmetricModeInterface;
 
-class OFB
+/**
+ * Output Feedback mode
+ */
+class OFB implements SymmetricModeInterface
 {
+    /// Implementation
     protected $impl;
+
+    /// Secret key
     protected $key;
+
+    /// Initialization Vector
     protected $iv;
 
     public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
