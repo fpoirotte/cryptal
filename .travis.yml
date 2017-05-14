@@ -17,16 +17,10 @@ php:
     - nightly
     - hhvm
 
-addons:
-    apt:
-        packages:
-        - util-linux
-
 matrix:
     fast_finish: true
     allow_failures:
     - php: nightly
-    - php: hhvm
 
 notifications:
     email: false
