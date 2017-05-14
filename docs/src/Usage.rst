@@ -25,8 +25,8 @@ data on the fly.
 
 ..  warning::
 
-    When using streaming encryption/decryption, the library relies mostly
-    on PHP code to handle the process. The underlying library is only used
+    When using the stream mode, the library relies mostly on PHP code
+    to handle encryption/decryption. The underlying library is only used
     to provide the cryptographic primitives for the selected cipher
     in `ECB <https://en.wikipedia.org/wiki/Electronic_codebook>`_ mode.
 
@@ -35,8 +35,7 @@ data on the fly.
     cannot be safely erased from memory and may linger there even after
     you are done processing the data.
 
-    If you are concerned about these issues, do not use streaming
-    encryption/decryption.
+    If you are concerned about these issues, do not use the stream mode.
 
 
 ..  note::
@@ -160,8 +159,7 @@ Decryption works pretty much the same way:
 Encryption/decryption contexts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Streaming encryption/decryption uses a stream context to pass several
-settings to the wrapper.
+Stream mode uses a stream context to pass several settings to the wrapper.
 
 The following table lists available options:
 
@@ -213,8 +211,7 @@ use ``stream_context_get_options()``:
 One-time mode
 -------------
 
-Then, whenever you would like to apply some cryptographic operation,
-retrieve an instance of the implementation using the following snippet:
+First, initialize the library and create a new instance of the implementation:
 
 ..  sourcecode:: inline-php
 
