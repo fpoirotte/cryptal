@@ -141,7 +141,7 @@ Encrypting some data is easy:
 Decryption
 ~~~~~~~~~~
 
-Decryption works pretty must the same way:
+Decryption works pretty much the same way:
 
 ..  sourcecode:: php
 
