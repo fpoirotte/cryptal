@@ -35,14 +35,32 @@ interface CryptoInterface
     /// Blowfish cipher
     const CIPHER_BLOWFISH = 7;
 
+    /// Camelia cipher with a 128 bit key
+    const CIPHER_CAMELIA_128 = 8;
+
+    /// Camelia cipher with a 192 bit key
+    const CIPHER_CAMELIA_192 = 9;
+
+    /// Camelia cipher with a 256 bit key
+    const CIPHER_CAMELIA_256 = 10;
+
     /// CAST5 cipher (also known as CAST-128 due to its use of a 128 bit key)
-    const CIPHER_CAST5 = 5;
+    const CIPHER_CAST5 = 11;
 
     /// Data Encryption Standard cipher
-    const CIPHER_DES = 6;
+    const CIPHER_DES = 12;
+
+    /// RC2 cipher
+    const CIPHER_RC2 = 13;
+
+    /// RC4 cipher
+    const CIPHER_RC4 = 14;
+
+    /// SEED cipher
+    const CIPHER_SEED = 15;
 
     /// Twofish cipher
-    const CIPHER_TWOFISH = 8;
+    const CIPHER_TWOFISH = 16;
 
     /**
      * Supported encrypted/decryption modes.
