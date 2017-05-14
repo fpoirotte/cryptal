@@ -17,11 +17,12 @@ Each such package **MUST**:
 *   Provide a concrete implementation for the ``\fpoirotte\Cryptal\CryptoInterface``
     interface and name that class ``\fpoirotte\Cryptal\Implementation``.
 
-*   Add ``fpoirotte/cryptal`` to the ``requires`` section
-    in their :file:`composer.json` file.
+*   Add ``fpoirotte/cryptal`` to the ``require`` section
+    of their :file:`composer.json` file.
 
 *   Add ``fpoirotte/cryptal-implementation`` to the ``provides`` section
-    in their :file:`composer.json` file.
+    of their :file:`composer.json` file. The version number **SHOULD** be set
+    to a meaningful value.
 
 
 Existing implementations
