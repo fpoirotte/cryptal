@@ -2,7 +2,6 @@
 
 namespace fpoirotte\Cryptal;
 
-use fpoirotte\Cryptal\SymmetricModeInterface;
 use fpoirotte\Cryptal\AsymmetricModeInterface;
 
 /**
@@ -174,7 +173,8 @@ class CryptoStream
         try {
             // Make sure the selected mode is supported.
             $mode = "\\fpoirotte\\Cryptal\\CryptoStream\\" . substr($mode, strlen('MODE_'));
-            if (!class_exists($mode, true) || !($mode instanceof SymmetricModeInterface)) {
+            $interfaces = class_implements($mode, true);
+            if (!$interfaces || !in_array("fpoirotte\Cryptal\SymmetricModeInterface", $interfaces)) {
                 throw new \Exception('Unsupported mode');
             }
 

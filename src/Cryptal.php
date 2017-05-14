@@ -2,8 +2,6 @@
 
 namespace fpoirotte;
 
-use fpoirotte\Cryptal\CryptoInterface;
-
 /**
  * Cryptography Abstraction Layer.
  */
@@ -31,8 +29,8 @@ class Cryptal
             return false;
         }
 
-        if (!class_exists("\\fpoirotte\\Cryptal\\Implementation", true) ||
-            !(\fpoirotte\Cryptal\Implementation instanceof CryptoInterface)) {
+        $interfaces = class_implements("\\fpoirotte\\Cryptal\\Implementation", true);
+        if (!$interfaces || !in_array("fpoirotte\Cryptal\CryptoInterface", $interfaces)) {
             throw new \Exception('No valid implementation found');
         }
 
