@@ -100,9 +100,6 @@ interface CryptoInterface
     /// Output Feedback mode
     const MODE_OFB = 9;
 
-    /// XEX-based tweaked-codebook mode with ciphertext stealing
-    const MODE_XTS = 10;
-
     /**
      * Construct a new encryption/decryption context.
      *
