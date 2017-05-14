@@ -52,58 +52,56 @@ Encryption
 
 Encrypting some data is easy:
 
-..  sourcecode:: php
+..  sourcecode:: inline-php
 
-    <?php
-        // Initialize the library (can be called multiple times)
-        \fpoirotte\Cryptal::init();
+    // Initialize the library (can be called multiple times)
+    \fpoirotte\Cryptal::init();
 
-        // Create an encryption context (see below)
-        $ctx = stream_context_create(
-            array(
-                'cryptal' => array(
-                    // Secret key.
-                    // Size must be compatible with the cipher's expectations.
-                    'key'   => '0123456789abcdef',
+    // Create an encryption context (see below)
+    $ctx = stream_context_create(
+        array(
+            'cryptal' => array(
+                // Secret key.
+                // Size must be compatible with the cipher's expectations.
+                'key'   => '0123456789abcdef',
 
-                    // Initialization Vector.
-                    // Size must be compatible with the cipher's expectations.
-                    'IV'    => 'abcdef0123456789',
-                )
+                // Initialization Vector.
+                // Size must be compatible with the cipher's expectations.
+                'IV'    => 'abcdef0123456789',
             )
-        );
+        )
+    );
 
-        $plaintext = "Some secret message we want to transmit securely";
+    $plaintext = "Some secret message we want to transmit securely";
 
-        // Open a new encryption stream, using the AES-128 cipher in CTR mode.
-        $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
+    // Open a new encryption stream, using the AES-128 cipher in CTR mode.
+    $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
 
-        // Feed the wrapper with the data to encrypt.
-        fwrite($encrypt, $plaintext);
+    // Feed the wrapper with the data to encrypt.
+    fwrite($encrypt, $plaintext);
 
-        // The encrypted data can be retrieved using fread().
-        // Make sure the $length argument is big enough to hold
-        // data that's at least 2 times the cipher's block size.
-        //
-        // fread() will return an empty string if there is not enough
-        // data in the buffer, a block of encrypted data, or false
-        // on error (eg. when the given $length is too small).
-        while ($data = fread($encrypt, 1024)) {
-            // Do something with the data...
-        }
+    // The encrypted data can be retrieved using fread().
+    // Make sure the $length argument is big enough to hold
+    // data that's at least 2 times the cipher's block size.
+    //
+    // fread() will return an empty string if there is not enough
+    // data in the buffer, a block of encrypted data, or false
+    // on error (eg. when the given $length is too small).
+    while ($data = fread($encrypt, 1024)) {
+        // Do something with the data...
+    }
 
-        // Notify the wrapper that the end of the data has been reached.
-        fflush($encrypt);
+    // Notify the wrapper that the end of the data has been reached.
+    fflush($encrypt);
 
-        // After fflush() has been called, you should keep reading
-        // from the stream until no more data can be retrieved.
-        while ($data = fread($encrypt, 1024)) {
-            // Do something with the data...
-        }
+    // After fflush() has been called, you should keep reading
+    // from the stream until no more data can be retrieved.
+    while ($data = fread($encrypt, 1024)) {
+        // Do something with the data...
+    }
 
-        // After that, the wrapper will be unusable and a new one
-        // must be created if another set of data must be processed.
-    ?>
+    // After that, the wrapper will be unusable and a new one
+    // must be created if another set of data must be processed.
 
 
 Decryption
@@ -111,54 +109,52 @@ Decryption
 
 Decryption works pretty much the same way:
 
-..  sourcecode:: php
+..  sourcecode:: inline-php
 
-    <?php
-        // Initialize the library (can be called multiple times)
-        \fpoirotte\Cryptal::init();
+    // Initialize the library (can be called multiple times)
+    \fpoirotte\Cryptal::init();
 
-        // Create a decryption context (see below)
-        $ctx = stream_context_create(
-            array(
-                'cryptal' => array(
-                    // Secret key.
-                    // Size must be compatible with the cipher's expectations.
-                    'key'   => '0123456789abcdef',
+    // Create a decryption context (see below)
+    $ctx = stream_context_create(
+        array(
+            'cryptal' => array(
+                // Secret key.
+                // Size must be compatible with the cipher's expectations.
+                'key'   => '0123456789abcdef',
 
-                    // Initialization Vector.
-                    // Size must be compatible with the cipher's expectations.
-                    'IV'    => 'abcdef0123456789',
-                )
+                // Initialization Vector.
+                // Size must be compatible with the cipher's expectations.
+                'IV'    => 'abcdef0123456789',
             )
-        );
+        )
+    );
 
-        // Open a new decryption stream, using the AES-128 cipher in CTR mode.
-        $decrypt = fopen("cryptal.decrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
+    // Open a new decryption stream, using the AES-128 cipher in CTR mode.
+    $decrypt = fopen("cryptal.decrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
 
-        // Feed the wrapper with the data to decrypt.
-        fwrite($decrypt, $ciphertext);
+    // Feed the wrapper with the data to decrypt.
+    fwrite($decrypt, $ciphertext);
 
-        // Just like for encryption, decrypted data can be retrieved
-        // using fread().
-        $plaintext = '';
-        while ($data = fread($decrypt, 1024)) {
-            // Do something with the data...
-            $plaintext .= $data;
-        }
+    // Just like for encryption, decrypted data can be retrieved
+    // using fread().
+    $plaintext = '';
+    while ($data = fread($decrypt, 1024)) {
+        // Do something with the data...
+        $plaintext .= $data;
+    }
 
-        // Notify the wrapper that the end of the data has been reached.
-        fflush($decrypt);
+    // Notify the wrapper that the end of the data has been reached.
+    fflush($decrypt);
 
-        // After fflush() has been called, you should keep reading
-        // from the stream until no more data can be retrieved.
-        while ($data = fread($decrypt, 1024)) {
-            // Do something with the data...
-            $plaintext .= $data;
-        }
+    // After fflush() has been called, you should keep reading
+    // from the stream until no more data can be retrieved.
+    while ($data = fread($decrypt, 1024)) {
+        // Do something with the data...
+        $plaintext .= $data;
+    }
 
-        // After that, the wrapper will be unusable and a new one
-        // must be created if another set of data must be processed.
-    ?>
+    // After that, the wrapper will be unusable and a new one
+    // must be created if another set of data must be processed.
 
 
 Encryption/decryption contexts
@@ -199,23 +195,20 @@ The following table lists available options:
 
 To set an option, use ``stream_context_set_option()``:
 
-..  sourcecode:: php
+..  sourcecode:: inline-php
 
-    <?php
-        stream_context_set_option($stream_or_context, 'cryptal', $option, $value);
-    ?>
+    stream_context_set_option($stream_or_context, 'cryptal', $option, $value);
 
 
 To retrieve the current value for an option,
 use ``stream_context_get_options()``:
 
-..  sourcecode:: php
+..  sourcecode:: inline-php
 
-    <?php
-        $options = stream_context_get_options($stream_or_context);
-        $padding = $options['cryptal']['padding'];
-        echo "Padding scheme in use: " . get_class($padding) . PHP_EOL;
-    ?>
+    $options = stream_context_get_options($stream_or_context);
+    $padding = $options['cryptal']['padding'];
+    echo "Padding scheme in use: " . get_class($padding) . PHP_EOL;
+
 
 One-time mode
 -------------
@@ -223,9 +216,7 @@ One-time mode
 Then, whenever you would like to apply some cryptographic operation,
 retrieve an instance of the implementation using the following snippet:
 
-..  sourcecode:: php
-
-    <?php
+..  sourcecode:: inline-php
 
     use \fpoirotte\Cryptal\Implementation;
     use \fpoirotte\Cryptal\CryptoInterface;
@@ -238,14 +229,10 @@ retrieve an instance of the implementation using the following snippet:
     // to indicate the cipher & mode to use, respectively.
     $impl = new Implementation(CryptoInterface::CIPHER_AES, CryptoInterface::MODE_CBC);
 
-    ?>
-
 Now, use whatever method you need to from the interface.
 For example:
 
-..  sourcecode:: php
-
-    <?php
+..  sourcecode:: inline-php
 
     // Generate an appropriate Initialization Vector
     $iv = openssl_random_pseudo_bytes($impl->getIVSize(), true);
@@ -267,8 +254,6 @@ For example:
     $decoded = $impl->decrypt($iv, $key, $ciphertext);
     var_dump(bin2hex($decoded));
 
-    ?>
-
 
 Padding
 -------
@@ -278,28 +263,24 @@ If you need to use another padding scheme, you can easily swap the default
 for an alternate implementation. Just set the ``padding`` context option
 to an instance of the scheme to use before opening the stream:
 
-..  sourcecode:: php
+..  sourcecode:: inline-php
 
-    <?php
+    use fpoirotte\Cryptal\Padding\AnsiX923;
 
-        use fpoirotte\Cryptal\Padding\AnsiX923;
+    $ctx = stream_context_create(
+        array(
+            'cryptal' => array(
+                'key'       => '0123456789abcdef',
+                'IV'        => 'abcdef0123456789',
 
-        $ctx = stream_context_create(
-            array(
-                'cryptal' => array(
-                    'key'       => '0123456789abcdef',
-                    'IV'        => 'abcdef0123456789',
-
-                    // Use the ANSI X.923 padding scheme instead of PKCS#7.
-                    'padding'   => new AnsiX923,
-                )
+                // Use the ANSI X.923 padding scheme instead of PKCS#7.
+                'padding'   => new AnsiX923,
             )
-        );
+        )
+    );
 
-        $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
-
-        // ...
-    ?>
+    $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
+    // Do something with the stream...
 
 For one-time encryption/decryption, you must explicitly pass the padding
 scheme to use to the implementation's constructor.
