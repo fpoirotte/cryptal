@@ -5,7 +5,7 @@ namespace fpoirotte\Cryptal;
 use fpoirotte\Cryptal\PaddingInterface;
 
 /**
- * A cryptographic abstraction
+ * Interface for a cryptographic implementation.
  */
 interface CryptoInterface
 {
@@ -107,14 +107,12 @@ interface CryptoInterface
      * Construct a new encryption/decryption context.
      *
      * \param opaque $cipher
-     *      One of the \c CIPHER_* constants from
-     *      fpoirotte\Cryptal\CryptoInterface.
+     *      One of the \c CIPHER_* constants from CryptoInterface.
      *
      * \param opaque $mode
-     *      One of the \c MODE_* constants from
-     *      fpoirotte\Cryptal\CryptoInterface.
+     *      One of the \c MODE_* constants from CryptoInterface.
      *
-     * \param fpoirotte::Cryptal::PaddingInterface
+     * \param PaddingInterface $padding
      *      Padding scheme to use.
      *
      * \param string $tagLength
@@ -147,7 +145,7 @@ interface CryptoInterface
      *      Additional authenticated data.
      *
      * \retval string
-     *      The ciphertext (encrypted data).
+     *      Ciphertext (encrypted data).
      *
      * \note
      *      The \a $iv parameter is unused for some modes
@@ -185,7 +183,7 @@ interface CryptoInterface
      *      Additional authenticated data.
      *
      * \retval string
-     *      The ciphertext (encrypted data).
+     *      Plaintext (decrypted data).
      *
      * \note
      *      The \a $iv parameter is unused for some modes

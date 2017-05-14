@@ -2,6 +2,9 @@
 
 namespace fpoirotte\Cryptal;
 
+/**
+ * Interface for a padding scheme.
+ */
 interface PaddingInterface
 {
     /**
@@ -11,9 +14,10 @@ interface PaddingInterface
      *      The cipher's block size, in bytes.
      *
      * \param int $expectedSize
-     *      The number of bytes expected to form a (possibly new)
-     *      complete block. This value is always such that
-     *      0 < \a $expectedSize <= \a $blockSize
+     *      The padding's expected size (in bytes) to form
+     *      a (possibly new) complete block.
+     *      This value is always such that:
+     *      \f$ 0 < \$expectedSize <= \$blockSize \f$
      *
      * \retval string
      *      Padding data.
