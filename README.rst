@@ -15,6 +15,11 @@ Usage
 
 See `this page <http://cryptal.readthedocs.io/en/latest/Usage.html>`_
 
+Full documentation
+------------------
+
+Visit http://cryptal.readthedocs.io/.
+
 Contributions
 -------------
 
