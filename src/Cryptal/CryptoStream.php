@@ -2,19 +2,48 @@
 
 namespace fpoirotte\Cryptal;
 
+use fpoirotte\Cryptal\SymmetricModeInterface;
+use fpoirotte\Cryptal\AsymmetricModeInterface;
+
+/**
+ * Cryptographic stream wrapper.
+ */
 class CryptoStream
 {
+    /// Stream context
     public $context;
+
+    /// Flag indicating that the stream was flushed
     protected $done;
+
+    /// Internal buffer
     protected $buffer;
+
+    /// Encryption/decryption mode
     protected $mode;
+
+    /// Padding scheme
     protected $padding;
+
+    /// Name of the method to call for the selected mode of operations.
     protected $method;
+
+    /// Name of the stream wrapper (to distinguish encryption from decryption)
     protected $direction;
+
+    /// Cipher's block size
     protected $blockSize;
-    const DEBUG = true;
+
+    /// \internal Force the display of error messages in the stream wrapper.
+    const DEBUG = false;
 
     // @codingStandardsIgnoreStart
+    /**
+     * Test for end of file (EOF).
+     *
+     * \çetval bool
+     *      \b true if the EOF has been reach, \b false otherwise.
+     */
     public function stream_eof()
     {
         // @codingStandardsIgnoreEnd
@@ -22,6 +51,25 @@ class CryptoStream
     }
 
     // @codingStandardsIgnoreStart
+    /**
+     * Open a new stream.
+     *
+     * \param string $path
+     *      URL that was passed to the original function.
+     *
+     * \param string $mode
+     *      Mode used to open the stream.
+     *
+     * \param int $options
+     *      Additional flags set by the streams API.
+     *
+     * \param string $opened_path
+     *      A variable that will be filled with the full path
+     *      for the stream on success.
+     *
+     * \retval bool
+     *      \b true on success, \b false on failure.
+     */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         // @codingStandardsIgnoreEnd
@@ -96,9 +144,8 @@ class CryptoStream
             $cipher = 'CIPHER_' . strtoupper(substr($parts['path'], 1));
         }
 
-        $mode   = '\\fpoirotte\\Cryptal\\Implementation::' . $mode;
         $cipher = '\\fpoirotte\\Cryptal\\Implementation::' . $cipher;
-        if (!defined($mode) || !defined($cipher)) {
+        if (!defined('\\fpoirotte\\Cryptal\\Implementation::' . $mode) || !defined($cipher)) {
             if (self::DEBUG || $options & STREAM_REPORT_ERRORS) {
                 trigger_error('Invalid mode/cipher', E_USER_ERROR);
             }
@@ -125,9 +172,12 @@ class CryptoStream
         }
 
         try {
-            // Remove the "Implementation::MODE_" prefix.
-            $mode = "\\fpoirotte\\Cryptal\\CryptoStream\\" .
-                substr($mode, strlen("\\fpoirotte\\Cryptal\\Implementation::MODE_"));
+            // Make sure the selected mode is supported.
+            $mode = "\\fpoirotte\\Cryptal\\CryptoStream\\" . substr($mode, strlen('MODE_'));
+            if (!class_exists($mode, true) || !($mode instanceof SymmetricModeInterface)) {
+                throw new \Exception('Unsupported mode');
+            }
+
             $this->mode = new $mode(
                 $impl,
                 $ctxOptions['cryptal']['key'],
@@ -144,7 +194,7 @@ class CryptoStream
         // Some modes of operation use the exact same process for both
         // encryption & decryption (eg. OFB, CTR, ...).
         // We just redirect the call for those modes to avoid code duplication.
-        if ('cryptal.decrypt' === $parts['scheme'] && method_exists($this->mode, 'decrypt')) {
+        if ('cryptal.decrypt' === $parts['scheme'] && $this->mode instanceof AsymmetricModeInterface) {
             $this->method = 'decrypt';
         } else {
             $this->method = 'encrypt';
@@ -158,6 +208,22 @@ class CryptoStream
     }
 
     // @codingStandardsIgnoreStart
+    /**
+     * Read data from the stream.
+     *
+     * \param int $count
+     *      Requested read count. This value must be large enough
+     *      to hold twice the cipher's block size in data.
+     *
+     * \retval bool
+     *      \b false is returned on error (eg. when the requested
+     *      read count is too small).
+     *
+     * \retval string
+     *      Data read from the stream. This will be an empty string
+     *      if there is not enough data in the stream's buffer yet,
+     *      or the encrypted/decrypted data otherwise.
+     */
     public function stream_read($count)
     {
         // @codingStandardsIgnoreEnd
@@ -207,6 +273,13 @@ class CryptoStream
     }
 
     // @codingStandardsIgnoreStart
+    /**
+     * Notify the wrapper that not more data will be sent to it.
+     *
+     * \retval bool
+     *      \b true if the notification is acknowledged,
+     *      \b false otherwise.
+     */
     public function stream_flush()
     {
         // @codingStandardsIgnoreEnd
@@ -225,6 +298,17 @@ class CryptoStream
     }
 
     // @codingStandardsIgnoreStart
+    /**
+     * Push data into the stream wrapper.
+     *
+     * \param string $data
+     *      Data to add to the stream's buffer.
+     *
+     * \retval int
+     *      Size of the data that's effectively been added
+     *      to the buffer. This may be less (even zero)
+     *      than the length of the given data.
+     */
     public function stream_write($data)
     {
         // @codingStandardsIgnoreEnd
