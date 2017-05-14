@@ -19,7 +19,7 @@ Contents:
 ..  toctree::
     :maxdepth: 2
 
-    Rationale
+    Introduction
     Installation
     Usage
     Implementers
