@@ -20,7 +20,7 @@ Each such package **MUST**:
 *   Add ``fpoirotte/cryptal`` to the ``require`` section
     of their :file:`composer.json` file.
 
-*   Add ``fpoirotte/cryptal-implementation`` to the ``provides`` section
+*   Add ``fpoirotte/cryptal-implementation`` to the ``provide`` section
     of their :file:`composer.json` file. The version number **SHOULD** be set
     to a meaningful value.
 
