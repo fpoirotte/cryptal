@@ -9,9 +9,8 @@ class StreamTest extends TestCase
     public function setUp()
     {
         // Initialize the library.
-        try {
-            \fpoirotte\Cryptal::init();
-        } catch (\Exception $e) {
+        \fpoirotte\Cryptal::init();
+        if (!class_exists('\\fpoirotte\\Cryptal\\Implementers\\Crypto')) {
             $this->markTestSkipped('No valid implementation found');
         }
     }
