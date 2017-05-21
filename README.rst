@@ -1,9 +1,10 @@
 Cryptography Abstraction Layer for PHP
 ======================================
 
-Cryptal provides a unified API to make applications work in various
-environments and to help developers focus on writing the actual logic
-of their application rather than dealing with cryptography issues.
+Cryptal provides a unified API to help developers create applications
+that use cryptographic primitives and work in various environments.
+That way, developers can focus on writing the logic for their application
+rather than having to deal with subtleties in cryptographic implementations.
 
 Installation
 ------------

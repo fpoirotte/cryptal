@@ -215,7 +215,7 @@ First, initialize the library and create a new instance of the implementation:
 
 ..  sourcecode:: inline-php
 
-    use \fpoirotte\Cryptal\Implementation;
+    use \fpoirotte\Cryptal\Implementers\Crypto;
     use \fpoirotte\Cryptal\CryptoInterface;
 
     // Initialize the library (can be called multiple times)
@@ -224,7 +224,7 @@ First, initialize the library and create a new instance of the implementation:
     // Retrieve an instance of the implementation.
     // Use the CIPHER_* & MODE_* constants from the CryptoInterface
     // to indicate the cipher & mode to use, respectively.
-    $impl = new Implementation(CryptoInterface::CIPHER_AES, CryptoInterface::MODE_CBC);
+    $impl = new Crypto(CryptoInterface::CIPHER_AES, CryptoInterface::MODE_CBC);
 
 Now, use whatever method you need to from the interface.
 For example:

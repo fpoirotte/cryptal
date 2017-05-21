@@ -2,7 +2,7 @@
 
 namespace fpoirotte\Cryptal;
 
-use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\Implementers\CryptoInterface;
 
 /**
  * Encryption/decryption mode where the same primitive

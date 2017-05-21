@@ -1,13 +1,13 @@
 <?php
 
-namespace fpoirotte\Cryptal;
+namespace fpoirotte\Cryptal\Crypto;
 
 use fpoirotte\Cryptal\AsymmetricModeInterface;
 
 /**
  * Cryptographic stream wrapper.
  */
-class CryptoStream
+class Stream
 {
     /// Stream context
     public $context;
@@ -143,8 +143,8 @@ class CryptoStream
             $cipher = 'CIPHER_' . strtoupper(substr($parts['path'], 1));
         }
 
-        $cipher = '\\fpoirotte\\Cryptal\\Implementation::' . $cipher;
-        if (!defined('\\fpoirotte\\Cryptal\\Implementation::' . $mode) || !defined($cipher)) {
+        $cipher = '\\fpoirotte\\Cryptal\\Implementers\\Crypto::' . $cipher;
+        if (!defined('\\fpoirotte\\Cryptal\\Implementers\\Crypto::' . $mode) || !defined($cipher)) {
             if (self::DEBUG || $options & STREAM_REPORT_ERRORS) {
                 trigger_error('Invalid mode/cipher', E_USER_ERROR);
             }
@@ -157,9 +157,9 @@ class CryptoStream
         $this->direction    = $parts['scheme'];
 
         try {
-            $impl = new \fpoirotte\Cryptal\Implementation(
+            $impl = new \fpoirotte\Cryptal\Implementers\Crypto(
                 constant($cipher),
-                \fpoirotte\Cryptal\CryptoInterface::MODE_ECB,
+                \fpoirotte\Cryptal\Implementers\CryptoInterface::MODE_ECB,
                 new \fpoirotte\Cryptal\Padding\None
             );
             $this->blockSize = $impl->getBlockSize();
@@ -172,7 +172,7 @@ class CryptoStream
 
         try {
             // Make sure the selected mode is supported.
-            $mode = "\\fpoirotte\\Cryptal\\CryptoStream\\" . substr($mode, strlen('MODE_'));
+            $mode = "\\fpoirotte\\Cryptal\\Modes\\" . substr($mode, strlen('MODE_'));
             $interfaces = class_implements($mode, true);
             if (!$interfaces || !in_array("fpoirotte\Cryptal\SymmetricModeInterface", $interfaces)) {
                 throw new \Exception('Unsupported mode');

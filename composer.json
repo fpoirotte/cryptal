@@ -25,6 +25,11 @@
         "squizlabs/php_codesniffer": "*",
         "erebot/buildenv": "^1.4.0"
     },
+    "suggest": {
+        "fpoirotte/cryptal-crypto-impl": "Provides primitives to encrypt/decrypt data",
+        "fpoirotte/cryptal-hash-impl": "Provides primitives to hash data",
+        "fpoirotte/cryptal-mac-impl": "Provides primitives to generate Message Authentication Codes"
+    },
     "autoload": {
         "psr-4": {
             "fpoirotte\\": "src/"

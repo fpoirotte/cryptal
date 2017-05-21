@@ -1,14 +1,14 @@
 <?php
 
-namespace fpoirotte\Cryptal\CryptoStream;
+namespace fpoirotte\Cryptal\Modes;
 
-use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\AsymmetricModeInterface;
 
 /**
- * Cipher Feedback mode
+ * Cipher Block Chaining mode
  */
-class CFB implements AsymmetricModeInterface
+class CBC implements AsymmetricModeInterface
 {
     /// Implementation
     protected $impl;
@@ -34,14 +34,15 @@ class CFB implements AsymmetricModeInterface
 
     public function encrypt($data, $context)
     {
-        $res = $this->impl->encrypt('', $this->key, $this->iv) ^ $data;
+        $data ^= $this->iv;
+        $res = $this->impl->encrypt('', $this->key, $data);
         $this->iv = $res;
         return $res;
     }
 
     public function decrypt($data, $context)
     {
-        $res = $this->impl->encrypt('', $this->key, $this->iv) ^ $data;
+        $res = $this->impl->decrypt('', $this->key, $data) ^ $this->iv;
         $this->iv = $data;
         return $res;
     }

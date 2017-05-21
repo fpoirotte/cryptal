@@ -1,11 +1,11 @@
 <?php
 
-namespace fpoirotte\Cryptal;
+namespace fpoirotte\Cryptal\Implementers;
 
 use fpoirotte\Cryptal\PaddingInterface;
 
 /**
- * Interface for a cryptographic implementation.
+ * Interface for encryption/decryption primitives.
  */
 interface CryptoInterface
 {

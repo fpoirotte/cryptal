@@ -29,14 +29,21 @@ class Cryptal
             return false;
         }
 
-        $interfaces = class_implements("\\fpoirotte\\Cryptal\\Implementation", true);
-        if (!$interfaces || !in_array("fpoirotte\Cryptal\CryptoInterface", $interfaces)) {
-            throw new \Exception('No valid implementation found');
+        foreach (array('Crypto', 'Hash', 'Mac') as $lib) {
+            $interfaces = @class_implements("\\fpoirotte\\Cryptal\\Implementers\\${lib}");
+            $parents    = @class_parents("\\fpoirotte\\Cryptal\\Implementers\\${lib}");
+            $bases      = array_merge((array) $interfaces, (array) $parents);
+
+            // If the class does not exist, $bases contains two boolean false values.
+            // Otherwise, it should contain the proper interface/abstract base class.
+            if (!in_array(false, $bases) && !in_array("fpoirotte\Cryptal\Implementers\\${lib}Interface", $bases)) {
+                throw new \Exception("No implementation found for $lib library");
+            }
         }
 
-        stream_wrapper_register("cryptal.encrypt", "\\fpoirotte\Cryptal\\CryptoStream")
+        stream_wrapper_register("cryptal.encrypt", "\\fpoirotte\Cryptal\\Crypto\\Stream")
             or die("Failed to register 'cryptal.encrypt' stream wrapper");
-        stream_wrapper_register("cryptal.decrypt", "\\fpoirotte\Cryptal\\CryptoStream")
+        stream_wrapper_register("cryptal.decrypt", "\\fpoirotte\Cryptal\\Crypto\\Stream")
             or die("Failed to register 'cryptal.decrypt' stream wrapper");
 
         $inited = true;

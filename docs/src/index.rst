@@ -4,7 +4,7 @@ Cryptal
 Cryptal is a Cryptography Abstraction Layer for PHP.
 
 This project is comprised of a unified API, which serves as an abstraction
-layer for various cryptographic `implementations`_.
+layer for various cryptographic libraries.
 
 You can find additional information about this project
 on the following websites:
@@ -12,12 +12,11 @@ on the following websites:
 *   `Source repository <https://github.com/fpoirotte/cryptal/>`_
 *   `Continuous Integration <http://travis-ci.org/fpoirotte/cryptal>`_
 *   `API documentation <./apidoc/>`_
-*   `Implementations`_
 
 Contents:
 
 ..  toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     Introduction
     Installation
@@ -41,8 +40,6 @@ Badges: |badges-travis| |badges-coveralls| |badges-hhvm|
 ..  |---| unicode:: U+02014 .. em dash
     :trim:
 
-.. _implementations:
-    https://packagist.org/providers/fpoirotte/cryptal-implementation
 
 .. vim: ts=4 et
 

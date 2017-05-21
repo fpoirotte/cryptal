@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class CryptoStreamTest extends TestCase
+class StreamTest extends TestCase
 {
     protected $ctx;
 

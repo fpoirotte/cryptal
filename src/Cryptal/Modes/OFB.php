@@ -1,8 +1,8 @@
 <?php
 
-namespace fpoirotte\Cryptal\CryptoStream;
+namespace fpoirotte\Cryptal\Modes;
 
-use fpoirotte\Cryptal\CryptoInterface;
+use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\SymmetricModeInterface;
 
 /**
