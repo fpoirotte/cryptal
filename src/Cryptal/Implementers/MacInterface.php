@@ -9,6 +9,11 @@ abstract class MacInterface
 {
     private $finished = false;
 
+    const MAC_HMAC  = 1;
+    const MAC_CMAC  = 2;
+    const MAC_OMAC1 = self::MAC_CMAC;
+    const MAC_PMAC  = 3;
+
     abstract public function __construct($algorithm, $key);
 
     abstract protected function internalUpdate($data);
