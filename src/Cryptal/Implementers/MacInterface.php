@@ -36,7 +36,7 @@ abstract class MacInterface
      * \param string $key
      *      Secret key used to produce the Message Authentication Code.
      */
-    abstract public function __construct($macAlgorithm, $innerAlgorithm, $key);
+    abstract public function __construct($macAlgorithm, object $innerAlgorithm, $key);
 
     /// \copydoc MacInterface::update
     abstract protected function internalUpdate($data);
@@ -124,7 +124,7 @@ abstract class MacInterface
      * \retval string
      *      Message Authentication Code for the given data.
      */
-    final public static function mac($macAlgorithm, $innerAlgorithm, $key, $data, $raw = false)
+    final public static function mac($macAlgorithm, object $innerAlgorithm, $key, $data, $raw = false)
     {
         $obj = new static($algorithm, $key);
         $obj->update($data);
