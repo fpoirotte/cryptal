@@ -10,31 +10,27 @@ use fpoirotte\Cryptal\SymmetricModeInterface;
  */
 class OFB implements SymmetricModeInterface
 {
-    /// Implementation
-    protected $impl;
-
-    /// Secret key
-    protected $key;
+    /// Cipher
+    protected $cipher;
 
     /// Initialization Vector
     protected $iv;
 
-    public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
+    public function __construct(CryptoInterface $cipher, $iv, $tagLength)
     {
         $ivSize     = strlen($iv);
-        $blockSize  = $impl->getBlockSize();
+        $blockSize  = $cipher->getBlockSize();
         if ($ivSize !== $blockSize) {
             throw new \Exception("Invalid IV size (got $ivSize bytes; should be $blockSize)");
         }
 
-        $this->impl = $impl;
-        $this->key  = $key;
-        $this->iv   = $iv;
+        $this->cipher   = $cipher;
+        $this->iv       = $iv;
     }
 
     public function encrypt($data, $context)
     {
-        $res = $this->impl->encrypt('', $this->key, $this->iv);
+        $res = $this->cipher->encrypt('', $this->iv);
         $this->iv = $res;
         return $res ^ $data;
     }

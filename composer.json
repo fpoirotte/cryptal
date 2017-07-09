@@ -1,6 +1,7 @@
 {
     "prefer-stable": true,
     "name": "fpoirotte/cryptal",
+    "type": "composer-plugin",
     "description": "Cryptography Abstraction Layer",
     "keywords": ["cryptal", "crypto", "cryptography", "openssl", "mcrypt"],
     "homepage": "https://github.com/fpoirotte/cryptal",
@@ -18,17 +19,16 @@
         "source": "https://github.com/fpoirotte/cryptal"
     },
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.4",
+        "fpoirotte/enum-trait": ">=0.1.4",
+        "composer-plugin-api": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
         "squizlabs/php_codesniffer": "*",
-        "erebot/buildenv": "^1.4.0"
-    },
-    "suggest": {
-        "fpoirotte/cryptal-crypto-impl": "Provides primitives to encrypt/decrypt data",
-        "fpoirotte/cryptal-hash-impl": "Provides primitives to hash data",
-        "fpoirotte/cryptal-mac-impl": "Provides primitives to generate Message Authentication Codes"
+        "erebot/buildenv": "^1.4.0",
+        "composer/composer": "^1.3",
+        "ext-gmp": "*"
     },
     "autoload": {
         "psr-4": {
@@ -38,6 +38,7 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "1.0.x-dev"
-        }
+        },
+        "class": "fpoirotte\\Cryptal\\ComposerPlugin"
     }
 }

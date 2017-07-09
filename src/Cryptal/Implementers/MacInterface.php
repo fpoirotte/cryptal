@@ -2,6 +2,9 @@
 
 namespace fpoirotte\Cryptal\Implementers;
 
+use fpoirotte\Cryptal\MacEnum;
+use fpoirotte\Cryptal\SubAlgorithmAbstractEnum;
+
 /**
  * Interface for Message Authentication Codes.
  */
@@ -10,33 +13,37 @@ abstract class MacInterface
     /// \internal Flag indicating whether this context is expired or not
     private $finished = false;
 
-    /// Keyed-hash MAC
-    const MAC_HMAC  = 1;
-
-    /// Block-cipher-based MAC
-    const MAC_CMAC  = 2;
-
-    /// Alias for MacInterface::MAC_CMAC
-    const MAC_OMAC1 = self::MAC_CMAC;
-
-    /// Parallelizable MAC
-    const MAC_PMAC  = 3;
-
     /**
      * Construct a new context to generate a Message Authentication Code.
      *
-     * \param opaque $macAlgorithm
-     *      One of the \c MAC_* constants, representing the algorithm
-     *      to use to produce the message authentication code.
+     * \param MacEnum $macAlgorithm
+     *      Algorithm to use to produce the message authentication code.
      *
-     * \param object $innerAlgorithm
-     *      Either an instance of CryptoInterface or HashInterface,
+     * \param SubAlgorithmAbstractEnum $innerAlgorithm
+     *      Inner algorithm used during generation.
+     *      This should be either an instance of CipherEnum or MacEnum,
      *      depending on the value for the \a $macAlgorithm parameter.
+     *
+     *      \warning
+     *          For MAC algorithms that use ciphers, the cipher must be
+     *          configured to use the Electronic Codebook (ECB) mode.
+     *          Other modes of operations will result in garbage output.
      *
      * \param string $key
      *      Secret key used to produce the Message Authentication Code.
+     *
+     * \param string $nonce
+     *      (optional) Nonce used to randomize the output.
+     *
+     *      \note
+     *          Not all MAC algorithms make use of this parameter.
      */
-    abstract public function __construct($macAlgorithm, object $innerAlgorithm, $key);
+    abstract public function __construct(
+        MacEnum $macAlgorithm,
+        SubAlgorithmAbstractEnum $innerAlgorithm,
+        $key,
+        $nonce = ''
+    );
 
     /// \copydoc MacInterface::update
     abstract protected function internalUpdate($data);
@@ -50,6 +57,14 @@ abstract class MacInterface
      */
     abstract protected function internalFinish();
 
+    /// Clone this context.
+    public function __clone()
+    {
+        // By default, we do nothing.
+        // Subclasses SHOULD redefine this method if specific handling
+        // is necessary to make the clone work properly.
+    }
+
     /**
      * Update the internal state using the given data.
      *
@@ -60,7 +75,11 @@ abstract class MacInterface
     final public function update($data)
     {
         if ($this->finished) {
-            throw \RuntimeError('Cannot update expired context');
+            throw new \RuntimeException('Cannot update expired context');
+        }
+
+        if (!is_string($data)) {
+            throw new \InvalidArgumentException('Invalid data');
         }
 
         $this->internalUpdate($data);
@@ -88,7 +107,7 @@ abstract class MacInterface
     final public function finish($raw = false)
     {
         if ($this->finished) {
-            throw \RuntimeError('Cannot update expired context');
+            throw new \RuntimeException('Cannot update expired context');
         }
 
         $this->finished = true;
@@ -100,12 +119,12 @@ abstract class MacInterface
      * All-in-one function to quickly compute
      * the message authentication code for a string of text.
      *
-     * \param opaque $macAlgorithm
-     *      One of the \c MAC_* constants, representing the algorithm
-     *      to use to produce the message authentication code.
+     * \param MacEnum $macAlgorithm
+     *      Algorithm to use to produce the message authentication code.
      *
-     * \param object $innerAlgorithm
-     *      Either an instance of CryptoInterface or HashInterface,
+     * \param SubAlgorithmAbstractEnum $innerAlgorithm
+     *      Inner algorithm used during generation.
+     *      This should be either an instance of CipherEnum or MacEnum,
      *      depending on the value for the \a $macAlgorithm parameter.
      *
      * \param string $key
@@ -114,6 +133,12 @@ abstract class MacInterface
      * \param string $data
      *      Data for which a message authentication code will be
      *      generated.
+     *
+     * \param string $nonce
+     *      (optional) Nonce used to randomize the output.
+     *
+     *      \note
+     *          Not all MAC algorithms make use of this parameter.
      *
      * \param bool $raw
      *      (optional) Whether the result should be returned
@@ -124,10 +149,31 @@ abstract class MacInterface
      * \retval string
      *      Message Authentication Code for the given data.
      */
-    final public static function mac($macAlgorithm, object $innerAlgorithm, $key, $data, $raw = false)
-    {
-        $obj = new static($algorithm, $key);
+    final public static function mac(
+        MacEnum $macAlgorithm,
+        SubAlgorithmAbstractEnum $innerAlgorithm,
+        $key,
+        $data,
+        $nonce = '',
+        $raw = false
+    ) {
+        $obj = new static($macAlgorithm, $innerAlgorithm, $key, $nonce);
         $obj->update($data);
         return $obj->finish($raw);
+    }
+
+    /**
+     * Return the Message Authentication Code associated
+     * with the current context, in hexadecimal form.
+     *
+     * \retval string
+     *      Message Authentication Code
+     */
+    final public function __toString()
+    {
+        // We clone the object first, to make sure
+        // it is still usable after this call.
+        $obj = clone $this;
+        return $obj->finish(false);
     }
 }

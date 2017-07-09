@@ -2,135 +2,54 @@
 
 namespace fpoirotte\Cryptal\Implementers;
 
+use fpoirotte\Cryptal\SubAlgorithmInterface;
 use fpoirotte\Cryptal\PaddingInterface;
+use fpoirotte\Cryptal\CipherEnum;
+use fpoirotte\Cryptal\ModeEnum;
 
 /**
  * Interface for encryption/decryption primitives.
  */
-interface CryptoInterface
+interface CryptoInterface extends SubAlgorithmInterface
 {
-    /**
-     * Supported ciphers.
-     *
-     * \note
-     *      The identifier associated with each cipher
-     *      may change at any point without prior notice
-     *      as new ciphers are added and older ones removed.
-     *      Users are therefore advised to use the constants
-     *      rather than hard-coded values in their code.
-     */
-
-    /// Triple-DES cipher
-    const CIPHER_3DES = 1;
-
-    /// Advanced Encryption Standard cipher with a 128 bit key
-    const CIPHER_AES_128 = 2;
-
-    /// Advanced Encryption Standard cipher with a 192 bit key
-    const CIPHER_AES_192 = 3;
-
-    /// Advanced Encryption Standard cipher with a 256 bit key
-    const CIPHER_AES_256 = 4;
-
-    /// Blowfish cipher
-    const CIPHER_BLOWFISH = 7;
-
-    /// Camelia cipher with a 128 bit key
-    const CIPHER_CAMELIA_128 = 8;
-
-    /// Camelia cipher with a 192 bit key
-    const CIPHER_CAMELIA_192 = 9;
-
-    /// Camelia cipher with a 256 bit key
-    const CIPHER_CAMELIA_256 = 10;
-
-    /// CAST5 cipher (also known as CAST-128 due to its use of a 128 bit key)
-    const CIPHER_CAST5 = 11;
-
-    /// Data Encryption Standard cipher
-    const CIPHER_DES = 12;
-
-    /// RC2 cipher
-    const CIPHER_RC2 = 13;
-
-    /// RC4 cipher
-    const CIPHER_RC4 = 14;
-
-    /// SEED cipher
-    const CIPHER_SEED = 15;
-
-    /// Twofish cipher
-    const CIPHER_TWOFISH = 16;
-
-    /**
-     * Supported encrypted/decryption modes.
-     *
-     * \note
-     *      The identifier associated with each mode
-     *      may change at any point without prior notice
-     *      as new modes are added and older ones removed.
-     *      Users are therefore advised to use the constants
-     *      rather than hard-coded values in their code.
-     */
-
-    /// Cipher Block Chaining mode
-    const MODE_CBC = 1;
-
-    /// Counter with CBC-MAC mode
-    const MODE_CCM = 2;
-
-    /// Cipher Feedback mode
-    const MODE_CFB = 3;
-
-    /// Counter mode
-    const MODE_CTR = 4;
-
-    /// EAX mode
-    const MODE_EAX = 5;
-
-    /// Electronic Codebook mode
-    const MODE_ECB = 6;
-
-    /// Galois-Counter Mode
-    const MODE_GCM = 7;
-
-    /// Offset Codebook mode
-    const MODE_OCB = 8;
-
-    /// Output Feedback mode
-    const MODE_OFB = 9;
+    const DEFAULT_TAG_LENGTH = 16;
 
     /**
      * Construct a new encryption/decryption context.
      *
-     * \param opaque $cipher
-     *      One of the \c CIPHER_* constants from CryptoInterface.
+     * \param CipherEnum $cipher
+     *      Cipher algorithm to use.
      *
-     * \param opaque $mode
-     *      One of the \c MODE_* constants from CryptoInterface.
+     * \param ModeEnum $mode
+     *      Cryptography mode to apply to the cipher.
      *
      * \param PaddingInterface $padding
      *      Padding scheme to use.
      *
-     * \param string $tagLength
+     * \param string $key
+     *      Secret key used for encryption/decryption.
+     *
+     * \param int $tagLength
      *      Length (in bytes) of the authentication tags to generate.
      *
      * \note
      *      The \a $tagLength parameter is unused unless
-     *      the required mode supports Authenticated Encryption
+     *      the supplied mode supports Authenticated Encryption
      *      with Additional Data (AEAD).
-     *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public function __construct($cipher, $mode, PaddingInterface $padding, $tagLength = 16);
+    public function __construct(
+        CipherEnum          $cipher,
+        ModeEnum            $mode,
+        PaddingInterface    $padding,
+        $key,
+        $tagLength = self::DEFAULT_TAG_LENGTH
+    );
 
     /**
      * Encrypt some data.
      *
      * \param string $iv
      *      Initialization Vector for the operation.
-     *
-     * \param string $key
-     *      Secret key used during the operation.
      *
      * \param string $data
      *      Data to encrypt.
@@ -159,16 +78,13 @@ interface CryptoInterface
      *      with Additional Data (AEAD).
      *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public function encrypt($iv, $key, $data, &$tag = null, $aad = '');
+    public function encrypt($iv, $data, &$tag = null, $aad = '');
 
     /**
      * Decrypt some data.
      *
      * \param string $iv
      *      Initialization Vector for the operation.
-     *
-     * \param string $key
-     *      Secret key used during the operation.
      *
      * \param string $data
      *      Data to decrypt.
@@ -198,7 +114,7 @@ interface CryptoInterface
      *      with Additional Data (AEAD).
      *      \c MODE_GCM & \c MODE_EAX are known to support AEAD.
      */
-    public function decrypt($iv, $key, $data, $tag = null, $aad = '');
+    public function decrypt($iv, $data, $tag = null, $aad = '');
 
     /**
      * Get the size of the Initialization Vector, in bytes.

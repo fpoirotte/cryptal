@@ -11,24 +11,20 @@ use fpoirotte\Cryptal\AsymmetricModeInterface;
 class ECB implements AsymmetricModeInterface
 {
     /// Implementation
-    protected $impl;
+    protected $cipher;
 
-    /// Secret key
-    protected $key;
-
-    public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
+    public function __construct(CryptoInterface $cipher, $iv, $tagLength)
     {
-        $this->impl = $impl;
-        $this->key  = $key;
+        $this->cipher = $cipher;
     }
 
     public function encrypt($data, $context)
     {
-        return $this->impl->encrypt('', $this->key, $data);
+        return $this->cipher->encrypt('', $data);
     }
 
     public function decrypt($data, $context)
     {
-        return $this->impl->decrypt('', $this->key, $data);
+        return $this->cipher->decrypt('', $data);
     }
 }

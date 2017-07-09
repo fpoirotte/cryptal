@@ -10,11 +10,8 @@ use fpoirotte\Cryptal\SymmetricModeInterface;
  */
 class CTR implements SymmetricModeInterface
 {
-    /// Implementation
-    protected $impl;
-
-    /// Secret key
-    protected $key;
+    /// Cipher
+    protected $cipher;
 
     /// Counter
     protected $counter;
@@ -22,16 +19,15 @@ class CTR implements SymmetricModeInterface
     /// Cipher block size
     protected $blockSize;
 
-    public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
+    public function __construct(CryptoInterface $cipher, $iv, $tagLength)
     {
         $ivSize     = strlen($iv);
-        $blockSize  = $impl->getBlockSize();
+        $blockSize  = $cipher->getBlockSize();
         if ($ivSize !== $blockSize) {
             throw new \Exception("Invalid IV size (got $ivSize bytes; should be $blockSize)");
         }
 
-        $this->impl         = $impl;
-        $this->key          = $key;
+        $this->cipher       = $cipher;
         $this->counter      = $iv;
         $this->blockSize    = $blockSize;
     }
@@ -53,7 +49,7 @@ class CTR implements SymmetricModeInterface
 
     public function encrypt($data, $context)
     {
-        $res = $this->impl->encrypt('', $this->key, $this->counter);
+        $res = $this->cipher->encrypt('', $this->counter);
         $this->incrementCounter();
         return $res ^ $data;
     }

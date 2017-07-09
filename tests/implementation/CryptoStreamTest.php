@@ -1,8 +1,12 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use fpoirotte\Cryptal\Padding\None;
+use fpoirotte\Cryptal\Registry;
+use fpoirotte\Cryptal\CipherEnum;
+use fpoirotte\Cryptal\ModeEnum;
 
-class StreamTest extends TestCase
+class CryptoStreamTest extends TestCase
 {
     protected $ctx;
 
@@ -10,8 +14,10 @@ class StreamTest extends TestCase
     {
         // Initialize the library.
         \fpoirotte\Cryptal::init();
-        if (!class_exists('\\fpoirotte\\Cryptal\\Implementers\\Crypto')) {
-            $this->markTestSkipped('No valid implementation found');
+        try {
+            Registry::buildCipher(CipherEnum::CIPHER_AES_128(), ModeEnum::MODE_ECB(), new None, 'abcdabcdabcdabcd', 0, true);
+        } catch (\Exception $e) {
+            $this->markTestSkipped('No available AES implementation');
         }
     }
 

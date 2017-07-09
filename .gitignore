@@ -2,6 +2,7 @@
 /src/Cryptal/Implementers/Crypto.php
 /src/Cryptal/Implementers/Hash.php
 /src/Cryptal/Implementers/Mac.php
+/src/Cryptal/registry.dat
 
 # Ignore composer's vendor/ dir.
 /vendor

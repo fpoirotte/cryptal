@@ -1,13 +1,15 @@
 <?php
 
-namespace fpoirotte\Cryptal\Crypto;
+namespace fpoirotte\Cryptal\Streams;
 
 use fpoirotte\Cryptal\AsymmetricModeInterface;
+use fpoirotte\Cryptal\CipherEnum;
+use fpoirotte\Cryptal\ModeEnum;
 
 /**
- * Cryptographic stream wrapper.
+ * Stream wrapper for encryption/decryption operations.
  */
-class Stream
+class Crypto
 {
     /// Stream context
     public $context;
@@ -124,7 +126,7 @@ class Stream
         }
 
         $parts = parse_url($path);
-        if ($parts === false) {
+        if ($parts === false || !isset($parts['host'], $parts['path'])) {
             if (self::DEBUG || $options & STREAM_REPORT_ERRORS) {
                 trigger_error('Invalid path', E_USER_ERROR);
             }
@@ -143,26 +145,24 @@ class Stream
             $cipher = 'CIPHER_' . strtoupper(substr($parts['path'], 1));
         }
 
-        $cipher = '\\fpoirotte\\Cryptal\\Implementers\\Crypto::' . $cipher;
-        if (!defined('\\fpoirotte\\Cryptal\\Implementers\\Crypto::' . $mode) || !defined($cipher)) {
-            if (self::DEBUG || $options & STREAM_REPORT_ERRORS) {
-                trigger_error('Invalid mode/cipher', E_USER_ERROR);
-            }
-            return false;
-        }
 
         $this->padding      = $padding;
         $this->buffer       = '';
         $this->done         = false;
         $this->direction    = $parts['scheme'];
+        $allowUnsafe        = isset($ctxOptions['cryptal']['allowUnsafe']) ?
+                              (bool) $ctxOptions['cryptal']['allowUnsafe'] : false;
 
         try {
-            $impl = new \fpoirotte\Cryptal\Implementers\Crypto(
-                constant($cipher),
-                \fpoirotte\Cryptal\Implementers\CryptoInterface::MODE_ECB,
-                new \fpoirotte\Cryptal\Padding\None
+            $cipherObj = Registry::buildCipher(
+                CipherEnum::$cipher(),
+                ModeEnum::MODE_ECB(),
+                new \fpoirotte\Cryptal\Padding\None,
+                $ctxOptions['cryptal']['key'],
+                0,
+                $allowUnsafe
             );
-            $this->blockSize = $impl->getBlockSize();
+            $this->blockSize = $cipherObj->getBlockSize();
         } catch (\Exception $e) {
             if (self::DEBUG || $options & STREAM_REPORT_ERRORS) {
                 trigger_error('Could not create data processor: ' . $e, E_USER_WARNING);
@@ -179,8 +179,7 @@ class Stream
             }
 
             $this->mode = new $mode(
-                $impl,
-                $ctxOptions['cryptal']['key'],
+                $cipherObj,
                 $iv,
                 $tagLength
             );

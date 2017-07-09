@@ -16,16 +16,13 @@ interface SymmetricModeInterface
      * \param CryptoInterface $impl
      *      Cryptographic implementation.
      *
-     * \param string $key
-     *      Secret key to use.
-     *
      * \param string $iv
      *      Initialization Vector for the cipher.
      *
      * \param int $tagLength
      *      Length (in bytes) of the tags to generate (AEAD only).
      */
-    public function __construct(CryptoInterface $impl, $key, $iv, $tagLength);
+    public function __construct(CryptoInterface $impl, $iv, $tagLength);
 
     /**
      * Encrypt some data.

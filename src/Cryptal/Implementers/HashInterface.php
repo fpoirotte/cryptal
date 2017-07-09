@@ -2,53 +2,24 @@
 
 namespace fpoirotte\Cryptal\Implementers;
 
+use fpoirotte\Cryptal\SubAlgorithmInterface;
+use fpoirotte\Cryptal\HashEnum;
+
 /**
  * Interface for hashes/message digests.
  */
-abstract class HashInterface
+abstract class HashInterface implements SubAlgorithmInterface
 {
     /// \internal Flag indicating whether this context is expired or not
     private $finished = false;
 
-    /// Cyclic Redundancy Check (from ITU V.42; 32 bit little-endian hashes)
-    const HASH_CRC32        = 1;
-
-    /// Message Digest 2 (128 bit hashes)
-    const HASH_MD2          = 2;
-
-    /// Message Digest 4 (128 bit hashes)
-    const HASH_MD4          = 3;
-
-    /// Message Digest 5 (128 bit hashes)
-    const HASH_MD5          = 4;
-
-    /// Secure Hash Algorithm 1 (160 bit hashes)
-    const HASH_SHA1         = 5;
-
-    /// RACE Integrity Primitives Evaluation Message Digest (160 bit hashes)
-    const HASH_RIPEMD160    = 6;
-
-    /// Secure Hash Algorithm 2 (224 bit hashes)
-    const HASH_SHA224       = 7;
-
-    /// Secure Hash Algorithm 2 (256 bit hashes)
-    const HASH_SHA256       = 8;
-
-    /// Secure Hash Algorithm 2 (384 bit hashes)
-    const HASH_SHA384       = 9;
-
-    /// Secure Hash Algorithm 2 (512 bit hashes)
-    const HASH_SHA512       = 10;
-
-
     /**
      * Construct a new hashing context.
      *
-     * \param opaque $algorithm
-     *      One of the \c HASH_* constants, representing the algorithm
-     *      to use to produce the hash/message digest.
+     * \param HashEnum $algorithm
+     *      Algorithm to use to produce the hash/message digest.
      */
-    abstract public function __construct($algorithm);
+    abstract public function __construct(HashEnum $algorithm);
 
     /// \copydoc HashInterface::update
     abstract protected function internalUpdate($data);
@@ -62,6 +33,14 @@ abstract class HashInterface
      */
     abstract protected function internalFinish();
 
+    /// Clone this context.
+    public function __clone()
+    {
+        // By default, we do nothing.
+        // Subclasses SHOULD redefine this method if specific handling
+        // is necessary to make the clone work properly.
+    }
+
     /**
      * Update the internal state using the given data.
      *
@@ -71,7 +50,11 @@ abstract class HashInterface
     final public function update($data)
     {
         if ($this->finished) {
-            throw \RuntimeError('Cannot update expired context');
+            throw new \RuntimeException('Cannot update expired context');
+        }
+
+        if (!is_string($data)) {
+            throw new \InvalidArgumentException('Invalid data');
         }
 
         $this->internalUpdate($data);
@@ -99,7 +82,7 @@ abstract class HashInterface
     final public function finish($raw = false)
     {
         if ($this->finished) {
-            throw \RuntimeError('Cannot update expired context');
+            throw new \RuntimeException('Cannot update expired context');
         }
 
         $this->finished = true;
@@ -111,9 +94,8 @@ abstract class HashInterface
      * All-in-one function to quickly compute
      * the hash/message digest for a string of text.
      *
-     * \param opaque $algorithm
-     *      One of the \c HASH_* constants, representing the algorithm
-     *      to use to produce the hash/message digest.
+     * \param HashEnum $algorithm
+     *      Algorithm to use to produce the hash/message digest.
      *
      * \param string $data
      *      Data to hash.
@@ -127,10 +109,25 @@ abstract class HashInterface
      * \retval string
      *      Hash/message digest for the given data.
      */
-    final public static function hash($algorithm, $data, $raw = false)
+    final public static function hash(HashEnum $algorithm, $data, $raw = false)
     {
         $obj = new static($algorithm);
         $obj->update($data);
         return $obj->finish($raw);
+    }
+
+    /**
+     * Return the hash associated with the current context,
+     * in hexadecimal form.
+     *
+     * \retval string
+     *      Hash
+     */
+    final public function __toString()
+    {
+        // We clone the object first, to make sure
+        // it is still usable after this call.
+        $obj = clone $this;
+        return $obj->finish(false);
     }
 }

@@ -10,39 +10,35 @@ use fpoirotte\Cryptal\AsymmetricModeInterface;
  */
 class CBC implements AsymmetricModeInterface
 {
-    /// Implementation
-    protected $impl;
-
-    /// Secret key
-    protected $key;
+    /// Cipher
+    protected $cipher;
 
     /// Initialization Vector
     protected $iv;
 
-    public function __construct(CryptoInterface $impl, $key, $iv, $tagLength)
+    public function __construct(CryptoInterface $cipher, $iv, $tagLength)
     {
         $ivSize     = strlen($iv);
-        $blockSize  = $impl->getBlockSize();
+        $blockSize  = $cipher->getBlockSize();
         if ($ivSize !== $blockSize) {
             throw new \Exception("Invalid IV size (got $ivSize bytes; should be $blockSize)");
         }
 
-        $this->impl = $impl;
-        $this->key  = $key;
-        $this->iv   = $iv;
+        $this->cipher   = $cipher;
+        $this->iv       = $iv;
     }
 
     public function encrypt($data, $context)
     {
         $data ^= $this->iv;
-        $res = $this->impl->encrypt('', $this->key, $data);
+        $res = $this->cipher->encrypt('', $data);
         $this->iv = $res;
         return $res;
     }
 
     public function decrypt($data, $context)
     {
-        $res = $this->impl->decrypt('', $this->key, $data) ^ $this->iv;
+        $res = $this->cipher->decrypt('', $data) ^ $this->iv;
         $this->iv = $data;
         return $res;
     }
