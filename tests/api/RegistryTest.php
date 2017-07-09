@@ -36,7 +36,7 @@ class RegistryTest extends TestCase
         $mac    = $this->getMockBuilder('Mac')->disableOriginalConstructor()->getMock();
 
         $registry = Registry::getInstance();
-        $registry->empty();
+        $registry->reset();
         $registry->addCipher('fpoirotte/cryptal', get_class($cipher), CipherEnum::CIPHER_AES_128(), ModeEnum::MODE_ECB(), ImplementationTypeEnum::TYPE_USERLAND());
         $registry->addHash('fpoirotte/cryptal', get_class($hash), HashEnum::HASH_MD5(), ImplementationTypeEnum::TYPE_USERLAND());
         $registry->addMac('fpoirotte/cryptal', get_class($mac), MacEnum::MAC_HMAC(), ImplementationTypeEnum::TYPE_USERLAND());
@@ -62,7 +62,7 @@ class RegistryTest extends TestCase
 
     public function testEmptying()
     {
-        $this->registry->empty();
+        $this->registry->reset();
 
         $ciphers = $this->registry->getSupportedCiphers();
         $this->assertEquals(array(), $ciphers);

@@ -117,7 +117,7 @@ class Registry
     {
         $data = @file_get_contents(self::$path);
         if (false === $data) {
-            $this->empty();
+            $this->reset();
         } else {
             $this->metadata = unserialize($data);
             $this->removeAlgorithms('');
@@ -327,7 +327,7 @@ class Registry
         return new $cls($algo, $subAlgo, $key, $nonce);
     }
 
-    public function empty()
+    public function reset()
     {
         $this->metadata = array(
             'crypt' => array(),
