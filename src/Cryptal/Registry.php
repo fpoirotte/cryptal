@@ -132,6 +132,20 @@ class Registry
                 ModeEnum::MODE_ECB(),
                 ImplementationTypeEnum::TYPE_USERLAND()
             );
+            $camellia = array(
+                CipherEnum::CIPHER_CAMELIA_128(),
+                CipherEnum::CIPHER_CAMELIA_192(),
+                CipherEnum::CIPHER_CAMELIA_256(),
+            );
+            foreach ($camellia as $cipher) {
+                $this->addCipher(
+                    '',
+                    'fpoirotte\\Cryptal\\DefaultAlgorithms\\Camellia',
+                    $cipher,
+                    ModeEnum::MODE_ECB(),
+                    ImplementationTypeEnum::TYPE_USERLAND()
+                );
+            }
 
             // Hashes
             $algos = array(
