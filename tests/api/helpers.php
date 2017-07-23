@@ -65,15 +65,27 @@ class AesEcbStub implements CryptoInterface
         if (isset($this->map[$key][$data])) {
             return pack('H*', $this->map[$key][$data]);
         }
-        $keyLen     = strlen($key);
-        $dataLen    = strlen($data);
-        $known      = implode("', '", array_keys($this->map));
+        $known  = implode("', '", array_keys($this->map));
         throw new \Exception("Unknown key or plaintext: key='$key', plaintext='$data', known_keys=('$known')");
     }
 
     public function decrypt($iv, $data, $tag = null, $aad = '')
     {
-        throw new \RuntimeError('Not implemented');
+        $key    = bin2hex($this->key);
+        $data   = bin2hex($data);
+
+        if (!isset($this->map[$key])) {
+            $known  = implode("', '", array_keys($this->map));
+            throw new \Exception("Unknown key or plaintext: key='$key', ciphertext='$data', known_keys=('$known')");
+        }
+
+        $res    = array_search($data, $this->map[$key]);
+        if (false !== $res) {
+            return pack('H*', $res);
+        }
+
+        $known  = implode("', '", array_keys($this->map));
+        throw new \Exception("Unknown key or plaintext: key='$key', ciphertext='$data', known_keys=('$known')");
     }
 
     public function getIVSize()
