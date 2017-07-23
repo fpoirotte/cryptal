@@ -35,7 +35,7 @@ class CTR implements SymmetricModeInterface
     /// Increment the value of the counter by one.
     protected function incrementCounter()
     {
-        for ($i = $this->blockSize - 1; $i > 0; $i--) {
+        for ($i = $this->blockSize - 1; $i >= 0; $i--) {
             // chr() takes care of overflows automatically.
             $this->counter[$i] = chr(ord($this->counter[$i]) + 1);
 
