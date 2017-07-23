@@ -1,0 +1,7 @@
+Cryptal implements the OCB mode of operations defined in RFC 7253.
+
+This mode is subjected to specific license restrictions described at:
+http://web.cs.ucdavis.edu/~rogaway/ocb/license.htm
+
+Before using Cryptal, please make sure that you comply with the terms
+set forth by the OCB licence.
