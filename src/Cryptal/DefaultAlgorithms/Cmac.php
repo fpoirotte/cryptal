@@ -35,7 +35,6 @@ class Cmac extends MacInterface
     );
 
     private $data;
-    private $key;
     private $k1;
     private $k2;
     private $cipher;
@@ -74,7 +73,6 @@ class Cmac extends MacInterface
         }
 
         $this->data     = '';
-        $this->key      = $key;
         $this->k1       = $k1;
         $this->k2       = $k2;
         $this->cipher   = $cipher;
