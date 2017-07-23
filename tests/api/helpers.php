@@ -52,7 +52,7 @@ class AesEcbStub implements CryptoInterface
         }
 
         if (!isset($this->map[bin2hex($key)])) {
-            throw new \InvalidArgumentException('Unsupported key');
+            throw new \InvalidArgumentException('Unsupported key: ' . bin2hex($key));
         }
 
         $this->key = $key;
