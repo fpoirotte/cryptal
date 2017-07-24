@@ -46,6 +46,9 @@ abstract class HashInterface implements SubAlgorithmInterface
      *
      * \param string $data
      *      Additional data to hash.
+     *
+     * \retval object
+     *      Returns this instance.
      */
     final public function update($data)
     {
@@ -58,6 +61,7 @@ abstract class HashInterface implements SubAlgorithmInterface
         }
 
         $this->internalUpdate($data);
+        return $this;
     }
 
     /**

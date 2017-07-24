@@ -71,6 +71,9 @@ abstract class MacInterface
      * \param string $data
      *      Additional data to include
      *      in the Message Authentication Code.
+     *
+     * \retval object
+     *      Returns this instance.
      */
     final public function update($data)
     {
@@ -83,6 +86,7 @@ abstract class MacInterface
         }
 
         $this->internalUpdate($data);
+        return $this;
     }
 
     /**
