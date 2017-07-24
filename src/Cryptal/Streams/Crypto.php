@@ -5,6 +5,7 @@ namespace fpoirotte\Cryptal\Streams;
 use fpoirotte\Cryptal\AsymmetricModeInterface;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
+use fpoirotte\Cryptal\Registry;
 
 /**
  * Stream wrapper for encryption/decryption operations.
