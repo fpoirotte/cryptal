@@ -30,6 +30,9 @@ class ChaCha20Openssh extends ChaCha20
     /// Main encryptor.
     protected $main;
 
+    protected $cipher;
+    protected $key;
+
     public function __construct(
         CipherEnum          $cipher,
         ModeEnum            $mode,
@@ -59,6 +62,8 @@ class ChaCha20Openssh extends ChaCha20
         $this->tagLength    = $tagLength;
         $this->main     = new ChaCha20($cipher, $mode, $padding, substr($key, 0, 32), 0);
         $this->header   = new ChaCha20($cipher, $mode, $padding, substr($key, 32), 0);
+        $this->key          = $key;
+        $this->cipher       = $cipher;
     }
 
     public function encrypt($iv, $data, &$tag = null, $aad = '')

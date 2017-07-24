@@ -11,8 +11,9 @@ use fpoirotte\Cryptal\ModeEnum;
 
 class AesEcbStub implements CryptoInterface
 {
-    protected $map;
-    private $key;
+    protected   $map;
+    private     $key;
+    protected   $cipher;
 
     public function __construct(
         CipherEnum          $cipher,
@@ -56,7 +57,8 @@ class AesEcbStub implements CryptoInterface
             throw new \InvalidArgumentException('Unsupported key: ' . bin2hex($key));
         }
 
-        $this->key = $key;
+        $this->key      = $key;
+        $this->cipher   = $cipher;
     }
 
     public function encrypt($iv, $data, &$tag = null, $aad = '')
@@ -97,5 +99,15 @@ class AesEcbStub implements CryptoInterface
     public function getBlockSize()
     {
         return 16;
+    }
+
+    public function getCipher()
+    {
+        return $this->cipher;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
     }
 }

@@ -22,6 +22,9 @@ class Camellia implements CryptoInterface
     /// Original key length in bits (128, 192 or 256)
     protected $keyLength;
 
+    protected $cipher;
+    protected $key;
+
     /// Subkeys used for encryption
     protected $k;
 
@@ -104,6 +107,8 @@ class Camellia implements CryptoInterface
         }
 
         $this->scheduleKeys($key);
+        $this->key          = $key;
+        $this->cipher       = $cipher;
     }
 
     /**
@@ -470,5 +475,15 @@ class Camellia implements CryptoInterface
     public function getBlockSize()
     {
         return 16;
+    }
+
+    public function getCipher()
+    {
+        return $this->cipher;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
     }
 }

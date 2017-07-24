@@ -30,6 +30,8 @@ class ChaCha20 implements CryptoInterface
     /// Tag length in bytes; 16 when AEAD is enabled, 0 otherwise.
     protected $tagLength;
 
+    protected $cipher;
+
     public function __construct(
         CipherEnum          $cipher,
         ModeEnum            $mode,
@@ -58,6 +60,7 @@ class ChaCha20 implements CryptoInterface
 
         $this->tagLength    = $tagLength;
         $this->key          = $key;
+        $this->cipher       = $cipher;
     }
 
     protected static function quarterRound(&$a, &$b, &$c, &$d)
@@ -188,5 +191,15 @@ class ChaCha20 implements CryptoInterface
         // ChaCha20 does not use blocks, which is the same
         // as saying each byte in the input is a separate block.
         return 1;
+    }
+
+    public function getCipher()
+    {
+        return $this->cipher;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
     }
 }

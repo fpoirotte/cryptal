@@ -135,4 +135,20 @@ interface CryptoInterface extends SubAlgorithmInterface
      *      does not use blocks.
      */
     public function getBlockSize();
+
+    /**
+     * Get the cipher used by this particular instance.
+     *
+     * \retval CipherEnum
+     *      Cipher in use by this instance.
+     */
+    public function getCipher();
+
+    /**
+     * Get the key used by this particular instance.
+     *
+     * \retval string
+     *      Key in use by this instance.
+     */
+    public function getKey();
 }
