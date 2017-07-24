@@ -35,8 +35,11 @@ class EAX implements AsymmetricModeInterface
         $H          = isset($options['cryptal']['data']) ? (string) $options['cryptal']['data'] : '';
         $blockSize  = $this->cipher->getBlockSize();
         $pad        = str_repeat("\x00", $blockSize - 1);
-        $tN         = (clone $this->omac)->update($pad . "\x00" . $this->nonce)->finish(true);
-        $tH         = (clone $this->omac)->update($pad . "\x01" . $H)->finish(true);
+
+        $omac       = clone $this->omac;
+        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finish(true);
+        $omac       = clone $this->omac;
+        $tH         = $omac->update($pad . "\x01" . $H)->finish(true);
 
         $ctr    = new CTR($this->cipher, $tN, $this->taglen);
         $C      = '';
@@ -44,7 +47,8 @@ class EAX implements AsymmetricModeInterface
             $C .= $ctr->encrypt($block, null);
         }
 
-        $tC         = (clone $this->omac)->update($pad . "\x02" . $C)->finish(true);
+        $omac       = clone $this->omac;
+        $tC         = $omac->update($pad . "\x02" . $C)->finish(true);
         stream_context_set_option($context, 'cryptal', 'tag', (string) substr($tN ^ $tH ^ $tC, 0, $this->taglen));
         return $C;
     }
@@ -56,9 +60,13 @@ class EAX implements AsymmetricModeInterface
         $T          = isset($options['cryptal']['tag']) ? (string) $options['cryptal']['tag'] : '';
         $blockSize  = $this->cipher->getBlockSize();
         $pad        = str_repeat("\x00", $blockSize - 1);
-        $tN         = (clone $this->omac)->update($pad . "\x00" . $this->nonce)->finish(true);
-        $tH         = (clone $this->omac)->update($pad . "\x01" . $H)->finish(true);
-        $tC         = (clone $this->omac)->update($pad . "\x02" . $data)->finish(true);
+
+        $omac       = clone $this->omac;
+        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finish(true);
+        $omac       = clone $this->omac;
+        $tH         = $omac->update($pad . "\x01" . $H)->finish(true);
+        $omac       = clone $this->omac;
+        $tC         = $omac->update($pad . "\x02" . $data)->finish(true);
         $T2         = (string) substr($tN ^ $tH ^ $tC, 0, $this->taglen);
 
         if ($T2 !== $T) {
