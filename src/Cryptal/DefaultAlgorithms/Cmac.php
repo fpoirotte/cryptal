@@ -49,27 +49,26 @@ class Cmac extends MacInterface
             throw new \InvalidArgumentException('A cipher was expected for the inner algorithm');
         }
 
-
         $cipher     = Registry::buildCipher($innerAlgorithm, ModeEnum::MODE_ECB(), new None, $key, 0, true);
-        $blkSize    = $cipher->getBlockSize();
-        if (!isset(self::$polynomials[$blkSize << 3])) {
+        $blockSize    = $cipher->getBlockSize();
+        if (!isset(self::$polynomials[$blockSize << 3])) {
             throw new \InvalidArgumentException('Unsupported cipher');
         }
 
-        $null       = str_repeat("\x00", $blkSize);
-        $polynomial = str_pad(self::$polynomials[$blkSize << 3], $blkSize, "\x00", STR_PAD_LEFT);
+        $null       = str_repeat("\x00", $blockSize);
+        $polynomial = str_pad(self::$polynomials[$blockSize << 3], $blockSize, "\x00", STR_PAD_LEFT);
         $k0         = $cipher->encrypt('', $null);
 
         if ((ord($k0[0]) & 0x80) === 0) {
-            $k1 = self::mul2mod($k0, $blkSize);
+            $k1 = self::mul2mod($k0, $blockSize);
         } else {
-            $k1 = self::mul2mod($k0, $blkSize) ^ $polynomial;
+            $k1 = self::mul2mod($k0, $blockSize) ^ $polynomial;
         }
 
         if ((ord($k1[0]) & 0x80) === 0) {
-            $k2 = self::mul2mod($k1, $blkSize);
+            $k2 = self::mul2mod($k1, $blockSize);
         } else {
-            $k2 = self::mul2mod($k1, $blkSize) ^ $polynomial;
+            $k2 = self::mul2mod($k1, $blockSize) ^ $polynomial;
         }
 
         $this->data     = '';
@@ -84,6 +83,7 @@ class Cmac extends MacInterface
         for ($i = $l - 1; $i >= 0; $i--) {
             $t = (ord($n[$i]) << 1) + $c;
             $c = $t >> 8;
+            // chr() takes care of overflows for us
             $n[$i] = chr($t);
         }
         return $n;
@@ -96,19 +96,19 @@ class Cmac extends MacInterface
 
     protected function internalFinish()
     {
-        $blkSize    = $this->cipher->getBlockSize();
-        $m          = str_split($this->data, $blkSize);
+        $blockSize  = $this->cipher->getBlockSize();
+        $m          = str_split($this->data, $blockSize);
         $last       = count($m) - 1;
         $mk1        = $m[$last] ^ $this->k1;
-        $mk2        = $this->k2 ^ str_pad($m[$last] . "\x80", $blkSize, "\x00", STR_PAD_RIGHT);
+        $mk2        = $this->k2 ^ str_pad($m[$last] . "\x80", $blockSize, "\x00", STR_PAD_RIGHT);
 
-        if (strlen($m[$last]) === $blkSize) {
+        if (strlen($m[$last]) === $blockSize) {
             $m[$last] = $mk1;
         } else {
             $m[$last] = $mk2;
         }
 
-        $c = str_repeat("\x00", $blkSize);
+        $c = str_repeat("\x00", $blockSize);
         for ($i = 0, $max = count($m); $i < $max; $i++) {
             $c = $this->cipher->encrypt('', $c ^ $m[$i]);
         }
