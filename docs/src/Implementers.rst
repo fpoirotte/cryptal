@@ -94,14 +94,14 @@ authentication code, the entry point will look like this:
                 ImplementationTypeEnum::TYPE_COMPILED()
             );
 
-            // Declare support for MD5
+            // Declare support for the MD5 message digest algorithm
             $registry->addHash(
                 '\\fpoirotte\\cryptal\\Plugins\\Tomcrypt\\Md5',
                 HashEnum::HASH_MD5(),
                 ImplementationTypeEnum::TYPE_COMPILED()
             );
 
-            // Declare support for HMAC
+            // Declare support for the HMAC message authenticator algorithm
             $registry->addMac(
                 '\\fpoirotte\\cryptal\\Plugins\\Tomcrypt\\Hmac',
                 MacEnum::MAC_HMAC(),
@@ -116,15 +116,15 @@ implementation:
     to be optimized for speed/uses assembly code.
 
 *   ``TYPE_COMPILED()`` **SHOULD** be used for other forms of compiled code,
-    such a code from a PHP extension coded in C or C++.
+    such as code from a PHP extension coded in C or C++.
 
 *   ``TYPE_USERLAND()`` **SHOULD** be used for algorithms implemented using
     regular (userland) PHP code, as opposed to code from a PHP extension.
 
-Existing implementations
-------------------------
+Available plugins
+-----------------
 
-You can browse the list of existing implementations on
+You can browse the list of existing plugins for Cryptal on
 `Packagist <https://packagist.org/providers/fpoirotte/cryptal-implementation>`_
 
 .. vim: ts=4 et

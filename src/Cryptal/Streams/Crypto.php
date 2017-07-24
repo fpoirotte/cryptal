@@ -274,7 +274,7 @@ class Crypto
 
     // @codingStandardsIgnoreStart
     /**
-     * Notify the wrapper that not more data will be sent to it.
+     * Notify the wrapper that no more data will be sent to it.
      *
      * \retval bool
      *      \b true if the notification is acknowledged,

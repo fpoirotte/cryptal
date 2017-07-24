@@ -140,7 +140,7 @@ A stream context is needed to configure the encryption/decryption process.
 The following table lists available options:
 
 ..  list-table:: Available options in encryption/decryption contexts
-    :widths: 10 40 50
+    :widths: 10 35 55
     :header-rows: 1
 
     *   - Name
@@ -161,8 +161,8 @@ The following table lists available options:
 
           Last but not least, when using those implementations, secret values
           may reside in memory for longer than is actually necessary
-          (possiblt even longer than the program's actual execution),
-          making them more vulnerable to memory debuggers and such.
+          (possibly even longer than the program's actual execution time),
+          making them vulnerable to memory forensic techniques and such.
 
     *   - ``data``
         - string
