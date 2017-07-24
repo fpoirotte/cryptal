@@ -140,6 +140,7 @@ A stream context is needed to configure the encryption/decryption process.
 The following table lists available options:
 
 ..  list-table:: Available options in encryption/decryption contexts
+    :widths: 10 40 50
     :header-rows: 1
 
     *   - Name
