@@ -1,36 +1,9 @@
 <?php
 
-use fpoirotte\Cryptal\Padding\None;
-use fpoirotte\Cryptal\CipherEnum;
-use fpoirotte\Cryptal\ModeEnum;
+namespace fpoirotte\Cryptal\Tests\API;
 
-/**
- * Test point addition for various NIST curves
- * using the test vectors at http://point-at-infinity.org/ecc/nisttv
- */
-class GCMTest extends \PHPUnit\Framework\TestCase
+class GCMTest extends AesBasedTestCase
 {
-    static $cache;
-
-    public static function setUpBeforeClass()
-    {
-        self::$cache = array();
-    }
-
-    public function getCipher($key)
-    {
-        if (!isset(self::$cache[$key])) {
-            $map = array(
-                16  => CipherEnum::CIPHER_AES_128(),
-                24  => CipherEnum::CIPHER_AES_192(),
-                32  => CipherEnum::CIPHER_AES_256(),
-            );
-            $cipher = new AesEcbStub($map[strlen($key)], ModeEnum::MODE_ECB(), new None, $key);
-            self::$cache[$key] = $cipher;
-        }
-        return self::$cache[$key];
-    }
-
     public function vectors()
     {
         /// @TODO vectors from http://www.ieee802.org/1/files/public/docs2011/bn-randall-test-vectors-0511-v1.pdf
@@ -324,9 +297,9 @@ class GCMTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider vectors
-     * @group medium
+     * @group slow
      */
-    public function testGCM($K, $P, $A, $IV, $C, $T)
+    public function testGCM_Mode($K, $P, $A, $IV, $C, $T)
     {
         $K  = pack('H*', $K);
         $P  = pack('H*', $P);
@@ -334,7 +307,7 @@ class GCMTest extends \PHPUnit\Framework\TestCase
         $IV = pack('H*', $IV);
 
         $cipher     = $this->getCipher($K);
-        $gcm        = new fpoirotte\Cryptal\Modes\GCM($cipher, $IV, 16);
+        $gcm        = new \fpoirotte\Cryptal\Modes\GCM($cipher, $IV, 16);
         $ctx        = stream_context_create(array('cryptal' => array('data'  => $A)));
 
         $res        = $gcm->encrypt($P, $ctx);

@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\DefaultAlgorithms\ChaCha20;
@@ -29,7 +31,7 @@ class ChaCha20Test extends TestCase
     /**
      * @dataProvider vectors
      */
-    public function testChaCha20($key, $nonce, $ciphertext)
+    public function test_Chacha20_cipher($key, $nonce, $ciphertext)
     {
         $key        = pack('H*', $key);
         $nonce      = pack('H*', $nonce);

@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\DefaultAlgorithms\Camellia;
@@ -40,7 +42,7 @@ class CamelliaTest extends TestCase
     /**
      * @dataProvider vectors
      */
-    public function testCamellia($cipher, $key, $plaintext, $ciphertext)
+    public function testCamelliaCipher($cipher, $key, $plaintext, $ciphertext)
     {
         $key        = pack('H*', $key);
         $plaintext  = pack('H*', $plaintext);

@@ -1,11 +1,19 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\Implementation;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\HashEnum;
 use fpoirotte\Cryptal\Registry;
 
 class HashTest extends TestCase
 {
+    public function setUp()
+    {
+        // Initialize the library.
+        \fpoirotte\Cryptal::init();
+    }
+
     public function provider()
     {
         // Run a few tests against known test vectors.
@@ -39,13 +47,12 @@ class HashTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testHash($algo, $data, $expected)
+    public function testMessageDigestWith($algo, $data, $expected)
     {
         try {
-            $impl = Registry::buildHash($algo, true);
-            $impl->update($data);
-            $result = $impl->finish(false);
-        } catch (Exception $e) {
+            $impl   = Registry::buildHash($algo, true);
+            $result = $impl->update($data)->finish(false);
+        } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }
 

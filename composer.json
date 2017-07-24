@@ -32,7 +32,8 @@
     },
     "autoload": {
         "psr-4": {
-            "fpoirotte\\": "src/"
+            "fpoirotte\\": "src/",
+            "fpoirotte\\Cryptal\\Tests\\": "tests/"
         }
     },
     "extra": {

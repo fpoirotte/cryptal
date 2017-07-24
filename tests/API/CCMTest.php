@@ -1,34 +1,9 @@
 <?php
 
-use fpoirotte\Cryptal\Padding\None;
-use fpoirotte\Cryptal\CipherEnum;
-use fpoirotte\Cryptal\ModeEnum;
+namespace fpoirotte\Cryptal\Tests\API;
 
-/**
- * Test point addition for various NIST curves
- * using the test vectors at http://point-at-infinity.org/ecc/nisttv
- */
-class CCMTest extends \PHPUnit\Framework\TestCase
+class CCMTest extends AesBasedTestCase
 {
-    static $cache;
-
-    public static function setUpBeforeClass()
-    {
-        self::$cache = array();
-    }
-
-    public function getCipher($key)
-    {
-        if (!isset(self::$cache[$key])) {
-            $map = array(
-                16  => CipherEnum::CIPHER_AES_128(),
-            );
-            $cipher = new AesEcbStub($map[strlen($key)], ModeEnum::MODE_ECB(), new None, $key);
-            self::$cache[$key] = $cipher;
-        }
-        return self::$cache[$key];
-    }
-
     public function vectors()
     {
         // K, N, A, P, C, T
@@ -95,9 +70,8 @@ class CCMTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider vectors
-     * @group medium
      */
-    public function testCCM($K, $N, $A, $P, $C, $T)
+    public function testCCM_Mode($K, $N, $A, $P, $C, $T)
     {
         $K  = pack('H*', $K);
         $P  = pack('H*', $P);
@@ -107,7 +81,7 @@ class CCMTest extends \PHPUnit\Framework\TestCase
         $T  = strtolower($T);
 
         $cipher     = $this->getCipher($K);
-        $ccm        = new fpoirotte\Cryptal\Modes\CCM($cipher, $N, strlen($T) >> 1);
+        $ccm        = new \fpoirotte\Cryptal\Modes\CCM($cipher, $N, strlen($T) >> 1);
         $ctx        = stream_context_create(array('cryptal' => array('data'  => $A)));
 
         $res        = $ccm->encrypt($P, $ctx);

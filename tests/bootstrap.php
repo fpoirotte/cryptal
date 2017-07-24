@@ -15,6 +15,3 @@ if (file_exists($autoload)) {
         DIRECTORY_SEPARATOR . 'autoload.php';
     require($autoload);
 }
-
-require(__DIR__ . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'helpers.php');
-

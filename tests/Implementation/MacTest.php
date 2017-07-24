@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\Implementation;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
 use fpoirotte\Cryptal\MacEnum;
@@ -11,11 +13,6 @@ class MacTest extends TestCase
     {
         // Initialize the library.
         \fpoirotte\Cryptal::init();
-        try {
-            Registry::buildMac(MacEnum::MAC_HMAC(), HashEnum::HASH_MD5(), 'abcdabcdabcdabcd', '', true);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('No available AES implementation');
-        }
     }
 
     public function provider()
@@ -44,20 +41,14 @@ class MacTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testMac($algo, $sub, $key, $data, $expected)
+    public function testMessageAuthenticationWith($key, $data, $expected)
     {
         try {
-            $result = \fpoirotte\Cryptal\Implementers\Mac::mac(
-                MacInterface::MAC_HMAC(),
-                new \fpoirotte\Cryptal\Implementers\Hash(HashInterface::HASH_MD5()),
-                pack('H*', $key),
-                $data,
-                false
-            );
-        } catch (Exception $e) {
+            $mac = Registry::buildMac(MacEnum::MAC_HMAC(), HashEnum::HASH_MD5(), pack('H*', $key), '', true);
+            $result = $mac->update($data)->finish(false);
+        } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }
-
         $this->assertSame($expected, $result);
     }
 }

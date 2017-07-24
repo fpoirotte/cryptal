@@ -1,12 +1,13 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\SubAlgorithmInterface;
 use fpoirotte\Cryptal\PaddingInterface;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
-
 
 class AesEcbStub implements CryptoInterface
 {

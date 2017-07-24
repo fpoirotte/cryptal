@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\Implementation;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\Registry;
@@ -78,7 +80,7 @@ class CryptoStreamTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testStream($mode, $iv, $expected)
+    public function testStreamingInterfaceWith($mode, $iv, $expected)
     {
         $plaintext =    '6bc1bee22e409f96e93d7e117393172a' .
                         'ae2d8a571e03ac9c9eb76fac45af8e51' .

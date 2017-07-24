@@ -1,7 +1,8 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace fpoirotte\Cryptal\Tests\API;
 
+use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Padding\Zero;
 use fpoirotte\Cryptal\Padding\NonEmptyZero;
 use fpoirotte\Cryptal\Padding\AnsiX923;

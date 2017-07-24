@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
 use fpoirotte\Cryptal\Padding\None;
@@ -32,8 +34,8 @@ class RegistryTest extends TestCase
     public function setUp()
     {
         $cipher = $this->getMockBuilder('fpoirotte\\Cryptal\\Implementers\\CryptoInterface')->getMock();
-        $hash   = $this->getMockBuilder('Hash')->disableOriginalConstructor()->getMock();
-        $mac    = $this->getMockBuilder('Mac')->disableOriginalConstructor()->getMock();
+        $hash   = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Hash')->disableOriginalConstructor()->getMock();
+        $mac    = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Mac')->disableOriginalConstructor()->getMock();
 
         $registry = Registry::getInstance();
         $registry->reset();
@@ -43,6 +45,11 @@ class RegistryTest extends TestCase
         $registry->addMac('fpoirotte/cryptal', get_class($mac), MacEnum::MAC_CMAC(), ImplementationTypeEnum::TYPE_USERLAND());
 
         $this->registry = $registry;
+    }
+
+    public function tearDown()
+    {
+        $this->registry->reset();
     }
 
     public function testAlgorithmsRetrieval()

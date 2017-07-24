@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
 use fpoirotte\Cryptal\DefaultAlgorithms\Umac;
@@ -15,7 +17,13 @@ class UmacTest extends TestCase
     public function setUp()
     {
         $registry = Registry::getInstance();
-        $registry->addCipher('', 'AesEcbStub', CipherEnum::CIPHER_AES_128(), ModeEnum::MODE_ECB(), ImplementationTypeEnum::TYPE_USERLAND());
+        $registry->addCipher(
+            '',
+            '\\fpoirotte\\Cryptal\\Tests\\API\\AesEcbStub',
+            CipherEnum::CIPHER_AES_128(),
+            ModeEnum::MODE_ECB(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
     }
 
     public function provider()
@@ -37,7 +45,7 @@ class UmacTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testUmac($key, $nonce, $data, $tag32, $tag64, $tag96)
+    public function test_UMAC_message_authenticator($key, $nonce, $data, $tag32, $tag64, $tag96)
     {
         $key    = pack('H*', $key);
         $nonce  = pack('H*', $nonce);

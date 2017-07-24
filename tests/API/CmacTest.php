@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
 use fpoirotte\Cryptal\DefaultAlgorithms\Cmac;
@@ -13,7 +15,13 @@ class CmacTest extends TestCase
     public function setUp()
     {
         $registry = Registry::getInstance();
-        $registry->addCipher('', 'AesEcbStub', CipherEnum::CIPHER_AES_128(), ModeEnum::MODE_ECB(), ImplementationTypeEnum::TYPE_USERLAND());
+        $registry->addCipher(
+            '',
+            '\\fpoirotte\\Cryptal\\Tests\\API\\AesEcbStub',
+            CipherEnum::CIPHER_AES_128(),
+            ModeEnum::MODE_ECB(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
     }
 
     public function provider()
@@ -37,7 +45,7 @@ class CmacTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testCmac($key, $data, $mac)
+    public function test_CMAC_message_authenticator($key, $data, $mac)
     {
         $key    = pack('H*', $key);
         $data   = pack('H*', (string) $data);

@@ -1,5 +1,7 @@
 <?php
 
+namespace fpoirotte\Cryptal\Tests\API;
+
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
 use fpoirotte\Cryptal\DefaultAlgorithms\Poly1305;
@@ -37,7 +39,7 @@ class Poly1305Test extends TestCase
     /**
      * @dataProvider vectors
      */
-    public function testPoly1305($data, $key, $mac)
+    public function test_Poly1305_message_authenticator($data, $key, $mac)
     {
         $key    = pack('H*', $key);
         $data   = pack('H*', $data);

@@ -1,34 +1,9 @@
 <?php
 
-use fpoirotte\Cryptal\Padding\None;
-use fpoirotte\Cryptal\CipherEnum;
-use fpoirotte\Cryptal\ModeEnum;
+namespace fpoirotte\Cryptal\Tests\API;
 
-/**
- * Test point addition for various NIST curves
- * using the test vectors at http://point-at-infinity.org/ecc/nisttv
- */
-class OCBTest extends \PHPUnit\Framework\TestCase
+class OCMTest extends AesBasedTestCase
 {
-    static $cache;
-
-    public static function setUpBeforeClass()
-    {
-        self::$cache = array();
-    }
-
-    public function getCipher($key)
-    {
-        if (!isset(self::$cache[$key])) {
-            $map = array(
-                16  => CipherEnum::CIPHER_AES_128(),
-            );
-            $cipher = new AesEcbStub($map[strlen($key)], ModeEnum::MODE_ECB(), new None, $key);
-            self::$cache[$key] = $cipher;
-        }
-        return self::$cache[$key];
-    }
-
     public function vectors()
     {
         // K, N, A, P, C, T
@@ -176,9 +151,8 @@ class OCBTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider vectors
-     * @group medium
      */
-    public function testOCB($K, $N, $A, $P, $C, $T)
+    public function testOCB_Mode($K, $N, $A, $P, $C, $T)
     {
         $K  = pack('H*', $K);
         $P  = pack('H*', $P);
@@ -188,7 +162,7 @@ class OCBTest extends \PHPUnit\Framework\TestCase
         $T  = strtolower($T);
 
         $cipher     = $this->getCipher($K);
-        $ocb        = new fpoirotte\Cryptal\Modes\OCB($cipher, $N, strlen($T) >> 1);
+        $ocb        = new \fpoirotte\Cryptal\Modes\OCB($cipher, $N, strlen($T) >> 1);
         $ctx        = stream_context_create(array('cryptal' => array('data'  => $A)));
 
         $res        = $ocb->encrypt($P, $ctx);
