@@ -1,6 +1,6 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests\API\Ciphers;
 
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;

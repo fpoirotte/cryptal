@@ -4,8 +4,20 @@
     bootstrap="tests/bootstrap.php">
 
   <testsuites>
-    <testsuite name="API">
-      <directory>tests/API/</directory>
+    <testsuite name="API::AEAD">
+      <directory>tests/API/AEAD</directory>
+    </testsuite>
+    <testsuite name="API::Ciphers">
+      <directory>tests/API/Ciphers</directory>
+    </testsuite>
+    <testsuite name="API::MessageAuthenticators">
+      <directory>tests/API/MessageAuthenticators</directory>
+    </testsuite>
+    <testsuite name="API::Misc">
+      <directory>tests/API/Misc</directory>
+    </testsuite>
+    <testsuite name="API::Modes">
+      <directory>tests/API/Modes</directory>
     </testsuite>
     <testsuite name="Implementation">
       <directory>tests/Implementation/</directory>

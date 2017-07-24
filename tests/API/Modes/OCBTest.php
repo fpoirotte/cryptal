@@ -1,6 +1,8 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests\API\Modes;
+
+use fpoirotte\Cryptal\Tests\AesBasedTestCase;
 
 class OCMTest extends AesBasedTestCase
 {

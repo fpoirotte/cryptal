@@ -1,6 +1,6 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests\API\MessageAuthenticators;
 
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
@@ -17,7 +17,7 @@ class CmacTest extends TestCase
         $registry = Registry::getInstance();
         $registry->addCipher(
             '',
-            '\\fpoirotte\\Cryptal\\Tests\\API\\AesEcbStub',
+            '\\fpoirotte\\Cryptal\\Tests\\AesEcbStub',
             CipherEnum::CIPHER_AES_128(),
             ModeEnum::MODE_ECB(),
             ImplementationTypeEnum::TYPE_USERLAND()

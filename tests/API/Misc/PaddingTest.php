@@ -1,6 +1,6 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests\API\Misc;
 
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Padding\Zero;

@@ -1,6 +1,6 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests;
 
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\ModeEnum;

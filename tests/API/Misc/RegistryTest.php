@@ -1,6 +1,6 @@
 <?php
 
-namespace fpoirotte\Cryptal\Tests\API;
+namespace fpoirotte\Cryptal\Tests\API\Misc;
 
 use PHPUnit\Framework\TestCase;
 use fpoirotte\Cryptal\Registry;
@@ -34,8 +34,8 @@ class RegistryTest extends TestCase
     public function setUp()
     {
         $cipher = $this->getMockBuilder('fpoirotte\\Cryptal\\Implementers\\CryptoInterface')->getMock();
-        $hash   = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Hash')->disableOriginalConstructor()->getMock();
-        $mac    = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Mac')->disableOriginalConstructor()->getMock();
+        $hash   = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Misc\\Hash')->disableOriginalConstructor()->getMock();
+        $mac    = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Misc\\Mac')->disableOriginalConstructor()->getMock();
 
         $registry = Registry::getInstance();
         $registry->reset();
