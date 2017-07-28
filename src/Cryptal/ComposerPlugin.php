@@ -13,5 +13,11 @@ class ComposerPlugin implements PluginInterface
     {
         $installer = new ComposerInstaller($io, $composer);
         $composer->getInstallationManager()->addInstaller($installer);
+
+        // Try to register the root package if it is a Cryptal plugin.
+        $rootPkg = $composer->getPackage();
+        if ($installer->supports($rootPkg->getType())) {
+            $installer->registerRootPackage($rootPkg);
+        }
     }
 }

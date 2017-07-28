@@ -36,7 +36,7 @@ class ComposerInstaller extends LibraryInstaller
 
             $interfaces = (array) class_implements($ep);
             if (!in_array('fpoirotte\\Cryptal\\Implementers\\PluginInterface', $interfaces)) {
-                throw new \InvalidArgumentException('Invalid entry point: ' . $ep);
+                throw new \InvalidArgumentException('Invalid entry point: ' . $ep);
             }
 
             call_user_func("$ep::registerAlgorithms", $wrapper);
@@ -57,7 +57,7 @@ class ComposerInstaller extends LibraryInstaller
         try {
             $registry   = Registry::getInstance();
             $wrapper    = new RegistryWrapper($registry, $package->getPrettyName());
-            $this->callEntryPoint($extra['cryptal.entrypoint'], $package->getAutoload(), $wrapper);
+            $this->callEntryPoints($extra['cryptal.entrypoint'], $package->getAutoload(), $wrapper);
             $registry->save();
         } catch (\Exception $e) {
             $this->io->writeError('Cryptal plugin installation failed, rolling back');
@@ -70,9 +70,9 @@ class ComposerInstaller extends LibraryInstaller
 
     public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
     {
-        $extra = $package->getExtra();
+        $extra = $target->getExtra();
         if (empty($extra['cryptal.entrypoint'])) {
-            throw new \UnexpectedValueException('Error while installing ' . $package->getPrettyName() .
+            throw new \UnexpectedValueException('Error while installing ' . $target->getPrettyName() .
                                                 ', cryptal-plugin packages should have an entry point ' .
                                                 'defined in their extra key to be usable.');
         }
@@ -80,9 +80,10 @@ class ComposerInstaller extends LibraryInstaller
         $res = parent::update($repo, $initial, $target);
 
         try {
+            $registry = Registry::getInstance();
             $registry->removeAlgorithms($initial->getPrettyName());
             $wrapper = new RegistryWrapper($registry, $target->getPrettyName());
-            $this->callEntryPoint($extra['cryptal.entrypoint'], $target->getAutoload(), $wrapper);
+            $this->callEntryPoints($extra['cryptal.entrypoint'], $target->getAutoload(), $wrapper);
             $registry->save();
         } catch (\Exception $e) {
             $this->io->writeError('Cryptal plugin update failed, rolling back');
@@ -105,5 +106,26 @@ class ComposerInstaller extends LibraryInstaller
     public function supports($packageType)
     {
         return 'cryptal-plugin' === $packageType;
+    }
+
+    public function registerRootPackage(PackageInterface $package)
+    {
+        $extra = $package->getExtra();
+        if (empty($extra['cryptal.entrypoint'])) {
+            throw new \UnexpectedValueException('Error while installing ' . $package->getPrettyName() .
+                                                ', cryptal-plugin packages should have an entry point ' .
+                                                'defined in their extra key to be usable.');
+        }
+
+        try {
+            $registry = Registry::getInstance();
+            $registry->removeAlgorithms($package->getPrettyName());
+            $wrapper = new RegistryWrapper($registry, $package->getPrettyName());
+            $this->callEntryPoints($extra['cryptal.entrypoint'], $package->getAutoload(), $wrapper);
+            $registry->save();
+        } catch (\Exception $e) {
+            $this->io->writeError('Cryptal plugin registration failed');
+            throw $e;
+        }
     }
 }

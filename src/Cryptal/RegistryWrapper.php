@@ -22,16 +22,16 @@ class RegistryWrapper
 
     public function addCipher($cls, CipherEnum $algo, ModeEnum $mode, ImplementationTypeEnum $type)
     {
-        $this->registry->addCipher($this->packageName, $algo, $mode, $type);
+        $this->registry->addCipher($this->packageName, $cls, $algo, $mode, $type);
     }
 
     public function addHash($cls, HashEnum $algo, ImplementationTypeEnum $type)
     {
-        $this->registry->addHash($this->packageName, $algo, $type);
+        $this->registry->addHash($this->packageName, $cls, $algo, $type);
     }
 
     public function addMac($cls, MacEnum $algo, ImplementationTypeEnum $type)
     {
-        $this->registry->addMac($this->packageName, $algo, $type);
+        $this->registry->addMac($this->packageName, $cls, $algo, $type);
     }
 }
