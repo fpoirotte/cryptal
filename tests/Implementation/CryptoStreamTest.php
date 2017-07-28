@@ -19,7 +19,7 @@ class CryptoStreamTest extends TestCase
         try {
             Registry::buildCipher(CipherEnum::CIPHER_AES_128(), ModeEnum::MODE_ECB(), new None, 'abcdabcdabcdabcd', 0, true);
         } catch (\Exception $e) {
-            $this->markTestSkipped('No available AES implementation');
+            $this->markTestSkipped("Could not find a valid AES implementation: $e");
         }
     }
 
