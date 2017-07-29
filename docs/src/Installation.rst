@@ -59,7 +59,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   compiled
-        -   compiled (CTR mode only)
+        -   n/a
 
     *   -   AES-192
         -   n/a
@@ -73,7 +73,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   compiled
-        -   n/a
+        -   compiled
 
     *   -   Blowfish
         -   n/a
@@ -115,7 +115,7 @@ Cipher algorithms
         -   n/a
         -   n/a
         -   n/a
-        -   compiled
+        -   compiled [#]_
 
     *   -   ChaCha20 (OpenSSH variant)
         -   PHP code
@@ -158,6 +158,12 @@ Cipher algorithms
         -   n/a
         -   compiled
         -   n/a
+
+..  [#] libsodium only supports AES-256 in GCM mode.
+        Also, this cipher/mode combination will not be available
+        unless the processor of the machine running the code
+        has support for the AES-NI instruction set.
+
 
 Hashing algorithms
 ~~~~~~~~~~~~~~~~~~
@@ -265,7 +271,7 @@ Message authentication algorithms
     *   -   HMAC
         -   n/a
         -   compiled
-        -   compiled (SHA-256 or SHA-512 only)
+        -   n/a
         -   compiled
 
     *   -   Poly1305
