@@ -14,7 +14,6 @@ abstract class AbstractHash extends AbstractContextBasedAlgorithm implements Has
     final public static function hash(HashEnum $algorithm, $data, $raw = false)
     {
         $obj = new static($algorithm);
-        $obj->update($data);
-        return $obj->finalize($raw);
+        return $obj->update($data)->finalize($raw);
     }
 }

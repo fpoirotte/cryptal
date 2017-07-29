@@ -21,7 +21,6 @@ abstract class AbstractMac extends AbstractContextBasedAlgorithm implements MacI
         $raw = false
     ) {
         $obj = new static($macAlgorithm, $innerAlgorithm, $key, $nonce);
-        $obj->update($data);
-        return $obj->finalize($raw);
+        return $obj->update($data)->finalize($raw);
     }
 }
