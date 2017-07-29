@@ -17,11 +17,17 @@ Cryptal supports 3 types of implementations:
 *   PHP code, which is slower and less secure, but provides support for niche
     algorithms.
 
+Choosing the plugin(s) to install
+---------------------------------
+
 The following tables list the algorithms provided by each plugin, with their
 implementation type. "Core" means the algorithm is provided by the Cryptal
 package itself and does not require any additional plugin to work.
 
-..  list-table:: Cipher algorithms
+Cipher algorithms
+~~~~~~~~~~~~~~~~~
+
+..  list-table::
     :header-rows: 1
     :stub-columns: 1
 
@@ -68,21 +74,21 @@ package itself and does not require any additional plugin to work.
         -   n/a
 
     *   -   Camellia-128
-        -   n/a
+        -   PHP code
         -   n/a
         -   compiled
         -   n/a
         -   n/a
 
     *   -   Camellia-192
-        -   n/a
+        -   PHP code
         -   n/a
         -   compiled
         -   n/a
         -   n/a
 
     *   -   Camellia-256
-        -   n/a
+        -   PHP code
         -   n/a
         -   compiled
         -   n/a
@@ -107,7 +113,7 @@ package itself and does not require any additional plugin to work.
         -   n/a
         -   n/a
         -   n/a
-        -   ?
+        -   n/a
 
     *   -   DES
         -   n/a
@@ -144,7 +150,10 @@ package itself and does not require any additional plugin to work.
         -   compiled
         -   n/a
 
-..  list-table:: Hash algorithms
+Hashing algorithms
+~~~~~~~~~~~~~~~~~~
+
+..  list-table::
     :header-rows: 1
     :stub-columns: 1
 
@@ -225,7 +234,10 @@ package itself and does not require any additional plugin to work.
         -   compiled
         -   compiled
 
-..  list-table:: MAC algorithms
+Message authentication algorithms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+..  list-table::
     :header-rows: 1
     :stub-columns: 1
 
@@ -277,8 +289,13 @@ package itself and does not require any additional plugin to work.
         -   n/a
         -   n/a
 
-Once you have decided which algorithms you are going to use, simply install
-a plugin that provides this algorithm using the selected implementation type:
+
+Installing the plugins
+----------------------
+
+Once you have determined the algorithms you are going to use and the plugins
+providing these algorithms that you want to use, execute the following commands
+to install the appropriate plugins:
 
 ..  sourcecode:: bash
 
@@ -298,4 +315,3 @@ a plugin that provides this algorithm using the selected implementation type:
     $ php composer.php require fpoirotte/cryptal-hash
 
 .. vim: ts=4 et
-

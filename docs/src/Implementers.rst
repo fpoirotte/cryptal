@@ -11,35 +11,21 @@ Guidelines
 ----------
 
 New implementations **MUST** be delivered as Composer packages.
-
-Such a package :
-*   **MUST** contain a requirement on ``fpoirotte/cryptal``
-    as part of the ``require`` section in their :file:`composer.json` file.
-
-*   **MUST** provide an implementation for one or several of the interfaces
-    defined in the ``\fpoirotte\Cryptal\Implementers`` namespace.
-
-*   **MUST** use ``cryptal-plugin`` as their installer ``type``.
-
-*   **MUST** declare a key named ``cryptal.entrypoint`` in the ``extra`` section
-    of their :file:`composer.json` file, pointing to a class implementing
-    the ``fpoirotte\Cryptal\Implementers\PluginInterface`` interface.
-
-To make it easier to find compatibles plugins for Cryptal
-on `Packagist <https://packagist.org/>`_, an implementation
-**MAY** ``provide`` the ``fpoirotte/cryptal-implementation`` virtual package
-in their :file:`composer.json`
-
-The version number associated with the provided virtual package **SHOULD**
-be set to a sensible value.
+Such a package **MUST** provide an implementation for one or several
+of the interfaces defined in the ``\fpoirotte\Cryptal\Implementers`` namespace.
 
 It is **RECOMMENDED** that implementers always support as many algorithms
 recognized by the Cryptography Abstraction Layer as the underlying library
 and Cryptal permit when adding support for a feature.
 
+The following sections describes how to turn a regular Composer package
+into a Cryptal plugin.
 
 Creating a new plugin
 ---------------------
+
+Update your :file:`composer.json` file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The basic skeleton for a plugin's :file:`composer.json` looks like this:
 
@@ -67,9 +53,43 @@ The basic skeleton for a plugin's :file:`composer.json` looks like this:
         }
     }
 
+
+There are four important things to note:
+
+*   The package's type **MUST** be set to ``cryptal-plugin`` in order for the
+    plugin to be properly recognized as such.
+
+*   The package **MUST** contain a requirement on ``fpoirotte/cryptal``
+    as part of the ``require`` section, so that the core files needed
+    to load and use the plugin are available at runtime.
+
+*   To make it easier to find compatible plugins for Cryptal
+    on `Packagist <https://packagist.org/>`_, an implementation
+    **SHOULD** ``provide`` the ``fpoirotte/cryptal-implementation``
+    virtual package in its :file:`composer.json` file.
+
+    The version number associated with the provided virtual package **SHOULD**
+    be set to a sensible value.
+
+*   The package **MUST** declare a key named ``cryptal.entrypoint``
+    in the ``extra`` section of their :file:`composer.json` file,
+    pointing to a class that implements the
+    ``fpoirotte\Cryptal\Implementers\PluginInterface`` interface.
+
+    If your plugin provides implementations for several features
+    and you would like each feature to use its own entry point,
+    you may also use an array of entry points here in place
+    of a string.
+
+Write the code for the entry point
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The entry point is responsible for registering any algorithm implemented
+by the plugin into Cryptal's registry.
+
 Assuming the plugin adds support for the AES cipher using 128 bit keys (AES-128)
 in Electronic Codebook (ECB) mode, the MD5 hash algorithm and the HMAC message
-authentication code, the entry point will look like this:
+authentication code, an entry point may look like this:
 
 ..  sourcecode:: inline-php
 
@@ -109,6 +129,25 @@ authentication code, the entry point will look like this:
             );
     }
 
+The ``RegistryWrapper`` provides 3 methods, meant to declare support for
+new ciphers (addCipher), hash algorithms (addHash) and message authentication
+codes (addMac).
+
+Each of these methods expects the full path to a class providing the algorithm
+as their first argument, followed by Cryptal's identifier for that algorithm
+and an identifier for the implementation type.
+
+For ciphers, the algorithm identifier is made of two arguments:
+
+*   The cipher's identifier itself
+    (one of the values declared in the ``CipherEnum`` enumeration)
+
+*   The mode of operations which can be applied to this cipher
+    (one of the values declared in the ``ModeEnum`` enumeration)
+
+For hash and MAC algorithms, just pass the algorithm's identifier defined
+in ``HashEnum`` or ``MacEnum``, respectively.
+
 The implementation type **SHOULD** match the actual nature of the algorithm's
 implementation:
 
@@ -120,6 +159,9 @@ implementation:
 
 *   ``TYPE_USERLAND()`` **SHOULD** be used for algorithms implemented using
     regular (userland) PHP code, as opposed to code from a PHP extension.
+
+Cryptal uses this information at runtime to determine the fastest/most secure
+implementation it can use.
 
 Available plugins
 -----------------
