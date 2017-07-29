@@ -21,7 +21,7 @@ algorithms.
 
 Cryptal supports 3 types of implementations:
 
-*   Assembly-based code, which provides maximum speed and is usually secure.
+*   Assembly code, which provides maximum speed and is usually secure.
 *   Compiled code, which can be a tiny bit slower, but is often more secure.
 *   PHP code, which is slower and less secure, but provides support for some
     niche algorithms.
@@ -32,6 +32,11 @@ Choosing the plugin(s) to install
 The following tables list the algorithms provided by each plugin, with their
 implementation type. "Core" means the algorithm is provided by the Cryptal
 package itself and does not require any additional plugin to work.
+
+Please note that these lists are only given as an indication of what the
+underlying library supports.
+The actual supported algorithms may vary due to differing compilation options
+or differing versions being used.
 
 Cipher algorithms
 ~~~~~~~~~~~~~~~~~
@@ -56,6 +61,7 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   AES-128
         -   n/a
@@ -64,6 +70,7 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   AES-192
         -   n/a
@@ -72,14 +79,16 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   AES-256
         -   n/a
         -   compiled
         -   compiled
         -   compiled
-        -   compiled
+        -   compiled [#]_
         -   n/a
+        -   compiled
 
     *   -   Blowfish
         -   n/a
@@ -88,6 +97,7 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   Camellia-128
         -   PHP code
@@ -96,6 +106,7 @@ Cipher algorithms
         -   n/a
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   Camellia-192
         -   PHP code
@@ -104,6 +115,7 @@ Cipher algorithms
         -   n/a
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   Camellia-256
         -   PHP code
@@ -112,6 +124,7 @@ Cipher algorithms
         -   n/a
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   CAST5
         -   n/a
@@ -120,17 +133,20 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   ChaCha20 (IETF variant)
         -   PHP code
         -   n/a
         -   n/a
         -   n/a
-        -   compiled [#]_
+        -   compiled
+        -   n/a
         -   n/a
 
     *   -   ChaCha20 (OpenSSH variant)
         -   PHP code
+        -   n/a
         -   n/a
         -   n/a
         -   n/a
@@ -144,6 +160,7 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   RC2
         -   n/a
@@ -152,6 +169,7 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   RC4
         -   n/a
@@ -160,14 +178,16 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   SEED
         -   n/a
         -   n/a
-        -   n/a
+        -   compiled
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   Twofish
         -   n/a
@@ -176,9 +196,10 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
 ..  [#] libsodium only supports AES-256 in GCM mode.
-        Also, this cipher/mode combination will not be available
+        Also, this cipher/mode combination is not available
         unless the processor of the machine running the code
         has support for the AES-NI instruction set.
 
