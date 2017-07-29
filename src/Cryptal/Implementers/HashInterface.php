@@ -14,7 +14,7 @@ interface HashInterface extends ContextBasedInterface, SubAlgorithmInterface
      * \param HashEnum $algorithm
      *      Algorithm to use to produce the hash/message digest.
      */
-    public function __construct(HashEnum $algorithm);    
+    public function __construct(HashEnum $algorithm);
 
     /**
      * All-in-one function to quickly compute
