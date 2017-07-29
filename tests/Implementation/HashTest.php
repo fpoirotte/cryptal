@@ -51,7 +51,7 @@ class HashTest extends TestCase
     {
         try {
             $impl   = Registry::buildHash($algo, true);
-            $result = $impl->update($data)->finish(false);
+            $result = $impl->update($data)->finalize(false);
         } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }

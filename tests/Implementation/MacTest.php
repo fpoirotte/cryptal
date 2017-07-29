@@ -45,7 +45,7 @@ class MacTest extends TestCase
     {
         try {
             $impl   = Registry::buildMac(MacEnum::MAC_HMAC(), HashEnum::HASH_MD5(), pack('H*', $key), '', true);
-            $result = $impl->update($data)->finish(false);
+            $result = $impl->update($data)->finalize(false);
         } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }
