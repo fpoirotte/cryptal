@@ -46,12 +46,15 @@ Cipher algorithms
         -   OpenSSL
         -   LibTomCrypt
         -   LibSodium
+        -   Hash
+        -   PHP-Crypto
 
     *   -   TripleDES (3DES)
         -   n/a
         -   compiled
         -   compiled
         -   compiled
+        -   n/a
         -   n/a
 
     *   -   AES-128
@@ -60,12 +63,14 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   AES-192
         -   n/a
         -   compiled
         -   compiled
         -   compiled
+        -   n/a
         -   n/a
 
     *   -   AES-256
@@ -74,6 +79,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   compiled
+        -   n/a
 
     *   -   Blowfish
         -   n/a
@@ -81,11 +87,13 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   Camellia-128
         -   PHP code
         -   n/a
         -   compiled
+        -   n/a
         -   n/a
         -   n/a
 
@@ -95,11 +103,13 @@ Cipher algorithms
         -   compiled
         -   n/a
         -   n/a
+        -   n/a
 
     *   -   Camellia-256
         -   PHP code
         -   n/a
         -   compiled
+        -   n/a
         -   n/a
         -   n/a
 
@@ -109,6 +119,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   ChaCha20 (IETF variant)
         -   PHP code
@@ -116,9 +127,11 @@ Cipher algorithms
         -   n/a
         -   n/a
         -   compiled [#]_
+        -   n/a
 
     *   -   ChaCha20 (OpenSSH variant)
         -   PHP code
+        -   n/a
         -   n/a
         -   n/a
         -   n/a
@@ -130,12 +143,14 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   RC2
         -   n/a
         -   compiled
         -   compiled
         -   compiled
+        -   n/a
         -   n/a
 
     *   -   RC4
@@ -144,6 +159,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   SEED
         -   n/a
@@ -151,12 +167,14 @@ Cipher algorithms
         -   n/a
         -   compiled
         -   n/a
+        -   n/a
 
     *   -   Twofish
         -   n/a
         -   compiled
         -   n/a
         -   compiled
+        -   n/a
         -   n/a
 
 ..  [#] libsodium only supports AES-256 in GCM mode.
@@ -174,79 +192,101 @@ Hashing algorithms
 
     *   -   Algorithm
         -   Core
+        -   Mcrypt
         -   OpenSSL
         -   LibTomCrypt
         -   LibSodium
         -   Hash
+        -   PHP-Crypto
 
     *   -   CRC32
         -   compiled
         -   n/a
         -   n/a
         -   n/a
+        -   n/a
         -   compiled
+        -   n/a
 
     *   -   MD2
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   MD4
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   MD5
         -   compiled
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   RIPEMD160
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   SHA1
         -   compiled
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   SHA224
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   SHA256
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   SHA384
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   SHA512
         -   n/a
+        -   n/a
         -   compiled
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
 Message authentication algorithms
@@ -258,24 +298,36 @@ Message authentication algorithms
 
     *   -   Algorithm
         -   Core
+        -   Mcrypt
+        -   OpenSSL
         -   LibTomCrypt
         -   LibSodium
         -   Hash
+        -   PHP-Crypto
 
     *   -   CMAC
         -   PHP code
+        -   n/a
+        -   n/a
         -   compiled
         -   n/a
         -   n/a
+        -   compiled
 
     *   -   HMAC
         -   n/a
+        -   n/a
+        -   n/a
         -   compiled
         -   n/a
+        -   compiled
         -   compiled
 
     *   -   Poly1305
         -   PHP code
+        -   n/a
+        -   n/a
+        -   n/a
         -   n/a
         -   n/a
         -   n/a
@@ -285,9 +337,15 @@ Message authentication algorithms
         -   n/a
         -   n/a
         -   n/a
+        -   n/a
+        -   n/a
+        -   n/a
 
     *   -   UMAC-64
         -   PHP code
+        -   n/a
+        -   n/a
+        -   n/a
         -   n/a
         -   n/a
         -   n/a
@@ -297,10 +355,16 @@ Message authentication algorithms
         -   n/a
         -   n/a
         -   n/a
+        -   n/a
+        -   n/a
+        -   n/a
 
     *   -   UMAC-128
         -   PHP code
+        -   n/a
+        -   n/a
         -   compiled
+        -   n/a
         -   n/a
         -   n/a
 
@@ -328,5 +392,8 @@ to install the appropriate plugins:
     $
     $ # Plugin based on the Hash PHP extension
     $ php composer.php require fpoirotte/cryptal-hash
+    $
+    $ # Plugin based on the PHP-Crypto extension
+    $ php composer.php require fpoirotte/cryptal-php-crypto
 
 .. vim: ts=4 et
