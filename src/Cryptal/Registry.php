@@ -132,6 +132,13 @@ class Registry
                 ModeEnum::MODE_ECB(),
                 ImplementationTypeEnum::TYPE_USERLAND()
             );
+            $this->addCipher(
+                '',
+                'fpoirotte\\Cryptal\\DefaultAlgorithms\\ChaCha20',
+                CipherEnum::CIPHER_CHACHA20(),
+                ModeEnum::MODE_ECB(),
+                ImplementationTypeEnum::TYPE_USERLAND()
+            );
             $camellia = array(
                 CipherEnum::CIPHER_CAMELIA_128(),
                 CipherEnum::CIPHER_CAMELIA_192(),

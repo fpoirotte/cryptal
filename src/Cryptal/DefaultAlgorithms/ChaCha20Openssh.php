@@ -60,8 +60,8 @@ class ChaCha20Openssh extends ChaCha20
         }
 
         $this->tagLength    = $tagLength;
-        $this->main     = new ChaCha20($cipher, $mode, $padding, substr($key, 0, 32), 0);
-        $this->header   = new ChaCha20($cipher, $mode, $padding, substr($key, 32), 0);
+        $this->main         = new ChaCha20($cipher, $mode, $padding, substr($key, 0, 32), 0);
+        $this->header       = new ChaCha20($cipher, $mode, $padding, substr($key, 32), 0);
         $this->key          = $key;
         $this->cipher       = $cipher;
     }
