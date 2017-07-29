@@ -29,6 +29,7 @@ class ComposerInstaller extends LibraryInstaller
             }
         }
 
+        $loader->register();
         foreach ((array) $eps as $ep) {
             if (!class_exists($ep, false)) {
                 $loader->loadClass($ep);
@@ -41,6 +42,7 @@ class ComposerInstaller extends LibraryInstaller
 
             call_user_func("$ep::registerAlgorithms", $wrapper);
         }
+        $loader->unregister();
     }
 
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
