@@ -3,7 +3,17 @@ Installation
 
 Cryptal relies on `Composer <https://getcomposer.org/>`_ for its installation.
 It also uses `plugins <https://packagist.org/providers/fpoirotte/cryptal-implementation>`_
-to provide implementations for the various algorithms
+to provide implementations for the various algorithms.
+
+Cryptal can be installed by itself using the following command:
+
+..  sourcecode:: bash
+
+    $ php composer.php require fpoirotte/cryptal
+
+However, the core package only provides a few algorithms using mostly PHP code.
+Therefore, you will usually want to install additional plugins to get access
+to more algorithms.
 
 Which plugin to install depends on the algorithms you need to use and whether
 you're willing to sacrifice a bit of speed and security to get additionnal
@@ -12,10 +22,9 @@ algorithms.
 Cryptal supports 3 types of implementations:
 
 *   Assembly-based code, which provides maximum speed and is usually secure.
-*   Compiled code, which is usually a tiny bit slower, but often more secure
-    too.
-*   PHP code, which is slower and less secure, but provides support for niche
-    algorithms.
+*   Compiled code, which can be a tiny bit slower, but is often more secure.
+*   PHP code, which is slower and less secure, but provides support for some
+    niche algorithms.
 
 Choosing the plugin(s) to install
 ---------------------------------
