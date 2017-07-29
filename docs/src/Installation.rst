@@ -232,7 +232,7 @@ Hashing algorithms
         -   n/a
         -   compiled
         -   compiled
-        -   compiled
+        -   n/a
         -   compiled
 
     *   -   SHA384
@@ -246,7 +246,7 @@ Hashing algorithms
         -   n/a
         -   compiled
         -   compiled
-        -   compiled
+        -   n/a
         -   compiled
 
 Message authentication algorithms
