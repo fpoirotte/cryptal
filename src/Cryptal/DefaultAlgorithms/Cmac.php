@@ -4,7 +4,7 @@ namespace fpoirotte\Cryptal\DefaultAlgorithms;
 
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
-use fpoirotte\Cryptal\Implementers\MacInterface;
+use fpoirotte\Cryptal\Implementers\AbstractMac;
 use fpoirotte\Cryptal\SubAlgorithmAbstractEnum;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
@@ -15,7 +15,7 @@ use fpoirotte\Cryptal\Registry;
  * Cipher-based message authentication code.
  *
  */
-class Cmac extends MacInterface
+class Cmac extends AbstractMac
 {
     /**
      * See http://sci.crypt.narkive.com/3lS5EbY4/
@@ -94,7 +94,7 @@ class Cmac extends MacInterface
         $this->data .= $data;
     }
 
-    protected function internalFinish()
+    protected function internalFinalize()
     {
         $blockSize  = $this->cipher->getBlockSize();
         $m          = str_split($this->data, $blockSize);

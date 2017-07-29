@@ -82,7 +82,7 @@ class Registry
 
     public function addHash($packageName, $cls, HashEnum $algo, ImplementationTypeEnum $type)
     {
-        $ifaces = class_parents($cls);
+        $ifaces = class_implements($cls);
         $iface  = 'fpoirotte\\Cryptal\\Implementers\\HashInterface';
         if (!$ifaces || !in_array($iface, $ifaces)) {
             throw new \InvalidArgumentException("$cls does not implement $iface");
@@ -92,7 +92,7 @@ class Registry
 
     public function addMac($packageName, $cls, MacEnum $algo, ImplementationTypeEnum $type)
     {
-        $ifaces = class_parents($cls);
+        $ifaces = class_implements($cls);
         $iface  = 'fpoirotte\\Cryptal\\Implementers\\MacInterface';
         if (!$ifaces || !in_array($iface, $ifaces)) {
             throw new \InvalidArgumentException("$cls does not implement $iface");

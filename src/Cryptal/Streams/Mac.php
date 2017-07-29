@@ -163,7 +163,7 @@ class Mac
         // @codingStandardsIgnoreEnd
 
         $clone  = clone $this->implementation;
-        $result = $clone->finish(true);
+        $result = $clone->finalize(true);
         return strlen($result) > $count ? false : $result;
     }
 

@@ -47,7 +47,7 @@ class Poly1305Test extends TestCase
         // Stream-based MAC
         $impl   = new Poly1305(MacEnum::MAC_POLY1305(), CipherEnum::CIPHER_AES_128(), $key);
         $impl->update($data);
-        $res    = bin2hex($impl->finish(true));
+        $res    = bin2hex($impl->finalize(true));
         $this->assertSame($mac, $res);
 
         // All-in-one MAC method

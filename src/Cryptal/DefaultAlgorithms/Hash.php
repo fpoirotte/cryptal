@@ -2,10 +2,10 @@
 
 namespace fpoirotte\Cryptal\DefaultAlgorithms;
 
-use fpoirotte\Cryptal\Implementers\HashInterface;
+use fpoirotte\Cryptal\Implementers\AbstractHash;
 use fpoirotte\Cryptal\HashEnum;
 
-class Hash extends HashInterface
+class Hash extends AbstractHash
 {
     private $func;
     private $data;
@@ -32,7 +32,7 @@ class Hash extends HashInterface
         $this->data .= $data;
     }
 
-    protected function internalFinish()
+    protected function internalFinalize()
     {
         $func = $this->func;
 

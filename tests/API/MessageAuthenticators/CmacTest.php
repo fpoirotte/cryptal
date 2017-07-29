@@ -53,7 +53,7 @@ class CmacTest extends TestCase
         // Stream-based MAC
         $impl   = new Cmac(MacEnum::MAC_CMAC(), CipherEnum::CIPHER_AES_128(), $key);
         $impl->update($data);
-        $res    = bin2hex($impl->finish(true));
+        $res    = bin2hex($impl->finalize(true));
         $this->assertSame($mac, $res);
 
         // All-in-one MAC method

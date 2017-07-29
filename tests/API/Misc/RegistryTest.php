@@ -7,35 +7,19 @@ use fpoirotte\Cryptal\Registry;
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\SubAlgorithmAbstractEnum;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
-use fpoirotte\Cryptal\Implementers\HashInterface;
-use fpoirotte\Cryptal\Implementers\MacInterface;
 use fpoirotte\Cryptal\ImplementationTypeEnum;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
 use fpoirotte\Cryptal\HashEnum;
 use fpoirotte\Cryptal\MacEnum;
 
-abstract class Hash extends HashInterface
-{
-    public function __construct(HashEnum $algo)
-    {
-    }
-}
-
-abstract class Mac extends MacInterface
-{
-    public function __construct(MacEnum $algo, SubAlgorithmAbstractEnum $subAlgo, $key, $nonce = '')
-    {
-    }
-}
-
 class RegistryTest extends TestCase
 {
     public function setUp()
     {
         $cipher = $this->getMockBuilder('fpoirotte\\Cryptal\\Implementers\\CryptoInterface')->getMock();
-        $hash   = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Misc\\Hash')->disableOriginalConstructor()->getMock();
-        $mac    = $this->getMockBuilder('fpoirotte\\Cryptal\\Tests\\API\\Misc\\Mac')->disableOriginalConstructor()->getMock();
+        $hash   = $this->getMockBuilder('fpoirotte\\Cryptal\\Implementers\\HashInterface')->disableOriginalConstructor()->getMock();
+        $mac    = $this->getMockBuilder('fpoirotte\\Cryptal\\Implementers\\MacInterface')->disableOriginalConstructor()->getMock();
 
         $registry = Registry::getInstance();
         $registry->reset();

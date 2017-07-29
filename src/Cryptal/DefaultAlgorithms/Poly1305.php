@@ -2,7 +2,7 @@
 
 namespace fpoirotte\Cryptal\DefaultAlgorithms;
 
-use fpoirotte\Cryptal\Implementers\MacInterface;
+use fpoirotte\Cryptal\Implementers\AbstractMac;
 use fpoirotte\Cryptal\SubAlgorithmAbstractEnum;
 use fpoirotte\Cryptal\MacEnum;
 
@@ -14,7 +14,7 @@ use fpoirotte\Cryptal\MacEnum;
  * \see
  *      http://tools.ietf.org/html/draft-irtf-cfrg-chacha20-poly1305-03
  */
-class Poly1305 extends MacInterface
+class Poly1305 extends AbstractMac
 {
     /// First half of secret key (second half in the specs due to endianness).
     private $r;
@@ -53,7 +53,7 @@ class Poly1305 extends MacInterface
         $this->data .= $data;
     }
 
-    protected function internalFinish()
+    protected function internalFinalize()
     {
         $res = gmp_init(0);
         if ('' !== $this->data) {

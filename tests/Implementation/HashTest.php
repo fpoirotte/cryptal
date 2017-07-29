@@ -55,7 +55,6 @@ class HashTest extends TestCase
         } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }
-
         $this->assertSame($expected, $result);
     }
 }

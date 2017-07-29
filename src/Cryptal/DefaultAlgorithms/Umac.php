@@ -4,7 +4,7 @@ namespace fpoirotte\Cryptal\DefaultAlgorithms;
 
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\Implementers\CryptoInterface;
-use fpoirotte\Cryptal\Implementers\MacInterface;
+use fpoirotte\Cryptal\Implementers\AbstractMac;
 use fpoirotte\Cryptal\SubAlgorithmAbstractEnum;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
@@ -15,7 +15,7 @@ use fpoirotte\Cryptal\Registry;
  * Message authentication code based on universal hashing.
  *
  */
-class Umac extends MacInterface
+class Umac extends AbstractMac
 {
     /// 36-bits prime number, in hexadecimal notation.
     const PRIME_36  = '0x0000000FFFFFFFFB';
@@ -97,7 +97,7 @@ class Umac extends MacInterface
         $this->data .= $data;
     }
 
-    protected function internalFinish()
+    protected function internalFinalize()
     {
         $hashed = $this->UHASH($this->data);
         $pad = $this->PDF($this->nonce);

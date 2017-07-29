@@ -44,8 +44,8 @@ class MacTest extends TestCase
     public function testMessageAuthenticationWith($key, $data, $expected)
     {
         try {
-            $mac = Registry::buildMac(MacEnum::MAC_HMAC(), HashEnum::HASH_MD5(), pack('H*', $key), '', true);
-            $result = $mac->update($data)->finish(false);
+            $impl   = Registry::buildMac(MacEnum::MAC_HMAC(), HashEnum::HASH_MD5(), pack('H*', $key), '', true);
+            $result = $impl->update($data)->finish(false);
         } catch (\Exception $e) {
             $this->markTestSkipped((string) $e);
         }

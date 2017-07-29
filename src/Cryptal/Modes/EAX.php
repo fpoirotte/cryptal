@@ -37,9 +37,9 @@ class EAX implements AsymmetricModeInterface
         $pad        = str_repeat("\x00", $blockSize - 1);
 
         $omac       = clone $this->omac;
-        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finish(true);
+        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finalize(true);
         $omac       = clone $this->omac;
-        $tH         = $omac->update($pad . "\x01" . $H)->finish(true);
+        $tH         = $omac->update($pad . "\x01" . $H)->finalize(true);
 
         $ctr    = new CTR($this->cipher, $tN, $this->taglen);
         $C      = '';
@@ -48,7 +48,7 @@ class EAX implements AsymmetricModeInterface
         }
 
         $omac       = clone $this->omac;
-        $tC         = $omac->update($pad . "\x02" . $C)->finish(true);
+        $tC         = $omac->update($pad . "\x02" . $C)->finalize(true);
         stream_context_set_option($context, 'cryptal', 'tag', (string) substr($tN ^ $tH ^ $tC, 0, $this->taglen));
         return $C;
     }
@@ -62,11 +62,11 @@ class EAX implements AsymmetricModeInterface
         $pad        = str_repeat("\x00", $blockSize - 1);
 
         $omac       = clone $this->omac;
-        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finish(true);
+        $tN         = $omac->update($pad . "\x00" . $this->nonce)->finalize(true);
         $omac       = clone $this->omac;
-        $tH         = $omac->update($pad . "\x01" . $H)->finish(true);
+        $tH         = $omac->update($pad . "\x01" . $H)->finalize(true);
         $omac       = clone $this->omac;
-        $tC         = $omac->update($pad . "\x02" . $data)->finish(true);
+        $tC         = $omac->update($pad . "\x02" . $data)->finalize(true);
         $T2         = (string) substr($tN ^ $tH ^ $tC, 0, $this->taglen);
 
         if ($T2 !== $T) {
