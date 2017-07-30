@@ -1,7 +1,7 @@
 Usage
 #####
 
-Cryptal provides support for the following features:
+Cryptal provides support for the following main features:
 
 *   Encryption/decryption
 *   Hashes (also known as message digests)
@@ -9,7 +9,7 @@ Cryptal provides support for the following features:
 
 For each feature, two sets of interfaces are provided:
 
-*   PHP streams, which hide the complexity of the operations
+*   PHP stream filters, which hide the complexity of the operations
     and provide transparent support for the features.
 
     This mode of operation is usually adequate for network protocols
@@ -31,12 +31,12 @@ The rest of this document describes the interfaces available for each feature.
 Encryption/decryption
 =====================
 
-Using streams
--------------
+Using stream filters
+--------------------
 
 ..  warning::
 
-    When using the stream mode, the library relies mostly on PHP code
+    When using the stream filters, the library relies mostly on PHP code
     to handle encryption/decryption. The underlying library is only used
     to provide the cryptographic primitives for the selected cipher
     in `ECB <https://en.wikipedia.org/wiki/Electronic_codebook>`_ mode.
@@ -46,25 +46,21 @@ Using streams
     cannot be safely erased from memory and may linger there even after
     you are done processing the data.
 
-    If you are concerned about these issues, do not use these streams.
-
-..  note::
-
-    A stream context is required when using this interface,
-    to pass all necessary settings to the library.
-
-    See the section on `Encryption/decryption contexts`_ for more information.
+    If you are concerned about these issues, do not use the stream filters.
 
 
 Encryption
 ~~~~~~~~~~
 
-Encrypting some data is easy:
+Encrypting data is easy:
 
 ..  sourcecode:: inline-php
 
     // Initialize the library
     \fpoirotte\Cryptal::init();
+
+    // Open a new stream
+    $stream = stream_socket_client('tcp://localhost:12345');
 
     // Create an encryption context (see below)
     $ctx = stream_context_create(
@@ -81,39 +77,48 @@ Encrypting some data is easy:
         )
     );
 
-    $plaintext = "Some secret message we want to transmit securely";
+    // Add an encryption layer to the stream.
+    $filter = stream_filter_append(
+        $stream,
+        'cryptal.encrypt',
+        // We want the data to be encrypted as we write it.
+        STREAM_FILTER_WRITE,
+        array(
+            // Encrypt the data using AES-128 in CTR mode.
+            'algorithm' => CipherEnum::CIPHER_AES_128(),
+            'mode'      => ModeEnum::MODE_CTR(),
 
-    // Open a new encryption stream, using the AES-128 cipher in CTR mode.
-    // See fpoirotte\Cryptal\CipherEnum and fpoirotte\Cryptal\ModeEnum
-    // for a list of valid ciphers/modes.
-    $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
+            // Secret key.
+            // Size must be compatible with the cipher's expectations.
+            'key'       => '0123456789abcdef',
 
-    // Feed the stream with data to encrypt.
-    fwrite($encrypt, $plaintext);
+            // Initialization Vector.
+            // Size must be compatible with the cipher's expectations.
+            'iv'        => 'abcdef0123456789',
+        )
+    );
 
-    // The encrypted data can be retrieved using fread().
-    // Make sure the $length argument is at least twice
-    // the cipher's block size.
-    //
-    // fread() will return an empty string if there is not enough
-    // data in the buffer, a block of encrypted data, or false
-    // on error (eg. when the given $length is too small).
-    while ($data = fread($encrypt, 1024)) {
-        // Do something with the data...
+    // We make sure the filter was successfully applied.
+    if (false === $filter) {
+        throw new \Exception('Could not add the encryption layer');
     }
 
-    // Notify the stream that the end of the data has been reached.
-    fflush($encrypt);
+    // Now that the encryption layer is in place, we can write
+    // to the stream just like we would normally do.
+    // Any data written to the stream will be encrypted on the fly.
+    fwrite($stream, "Some secret message we want to transmit securely");
 
-    // After fflush() has been called, you should keep reading
-    // from the stream until no more data can be retrieved.
-    while ($data = fread($encrypt, 1024)) {
-        // Do something with the data...
-    }
+..  warning::
 
-    // After that, the stream will be unusable and a new one
-    // must be created if further data must be processed.
+    When adding the filter, the 3rd argument to ``stream_filter_append()``
+    (``$read_write``) should be set to either ``STREAM_FILTER_WRITE``
+    if the encryption should happen during writes (eg. via ``fwrite()``),
+    or ``STREAM_FILTER_READ`` if it should happen during reads (eg. via
+    ``fread()`` or ``fgets()``).
 
+    Using the default value (``STREAM_FILTER_ALL``) means the same filter
+    is applied to both operations, which is not supported and may produce
+    unexpected results.
 
 Here's another example, this time using Authenticated Encryption with
 Associated Data (AEAD):
@@ -127,29 +132,49 @@ Decryption
 ~~~~~~~~~~
 
 Decryption works the same way. Just substitute ``cryptal.decrypt`` in place
-of ``cryptal.encrypt`` when creating the stream.
+of ``cryptal.encrypt`` when adding the filter.
 
 When using Authenticated Encryption, @TODO
 
 
-Encryption/decryption contexts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Filter parameters for ``cryptal.encrypt``/``cryptal.decrypt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A stream context is needed to configure the encryption/decryption process.
+When using streams, the following options may be used when adding the filter
+to control the way encryption/decryption is performed:
 
-The following table lists available options:
-
-..  list-table:: Available options in encryption/decryption contexts
-    :widths: 10 35 55
+..  list-table:: Parameters for cryptal.encrypt/cryptal.decrypt
+    :widths: 10 5 35 50
     :header-rows: 1
 
     *   - Name
+        - Optional
         - Expected type
         - Description
 
+    *   - ``mode``
+        - yes
+        - ``\fpoirotte\Cryptal\ModeEnum``
+        - The cipher's mode of operations to use.
+
+          This parameter is important as the various modes offer different
+          security garantees. Make sure you have read documentation on the
+          various modes and their implications before setting this value.
+
+    *   - ``algorithm``
+        - yes
+        - ``\fpoirotte\Cryptal\CipherEnum``
+        - The cipher algorithm to use to encrypt/decrypt the data.
+
+          This parameter is important as the various ciphers offer different
+          security garantees. Make sure you have read documentation on the
+          various ciphers and their limitations before setting this value.
+
     *   - ``allowUnsafe``
+        - no
         - boolean
         - Whether userland PHP implementations may be used or not.
+          Defaults to ``false``.
 
           While those implementations add support for some rarely used
           algorithms, they are usually way slower than implementations
@@ -157,7 +182,7 @@ The following table lists available options:
 
           Also, those implementations are considered unsafe because they cannot
           protect the application from certain classes of attacks like
-          PHP extensions usually do (eg. timing attacks).
+          PHP extensions usually do (eg. side-channel attacks).
 
           Last but not least, when using those implementations, secret values
           may reside in memory for longer than is actually necessary
@@ -165,80 +190,79 @@ The following table lists available options:
           making them vulnerable to memory forensic techniques and such.
 
     *   - ``data``
+        - no
         - string
         - Additional Data to authenticate when using `Authenticated Encryption
           <https://en.wikipedia.org/wiki/Authenticated_encryption>`_
 
-    *   - ``IV``
+    *   - ``iv``
+        - yes/no
         - string
-        - Initialization Vector for the cipher
+        - Initialization Vector for the cipher.
+          Whether this parameter is optional or not depends of the
+          encryption/decryption mode used.
 
     *   - ``key``
+        - yes
         - string
         - Symmetric key to use for encryption/decryption
 
     *   - ``padding``
-        - Instance of ``\fpoirotte\Cryptal\PaddingInterface``
-        - Padding scheme to use (defaults to no padding)
+        - no
+        - ``\fpoirotte\Cryptal\PaddingInterface``
+        - Padding scheme to use. Defaults to no padding.
 
     *   - ``tag``
+        - no
         - string
         - Authentication tag for the current block. This value is set by the
-          stream wrapper during encryption of a block. It should be set manually
-          when decrypting, before passing a block to decrypt to the stream
-          wrapper.
+          filter during encryption of a block. It should be set manually
+          when decrypting, before passing a block to decrypt to the stream.
 
     *   - ``tagLength``
+        - no
         - integer
         - Desired tag length (in bytes) when using `Authenticated Encryption
           <https://en.wikipedia.org/wiki/Authenticated_encryption>`_.
-          Defaults to 16 bytes (128 bits). Only used during encryption,
-          as it can be deduced from the ``tag``'s actual length when decrypting.
 
+          Defaults to 16 bytes (128 bits).
+          
+          This parameters is only used during encryption, as it can be deduced
+          from the ``tag``'s actual length when decrypting.
 
-To set an option, use ``stream_context_set_option()``:
-
-..  sourcecode:: inline-php
-
-    stream_context_set_option($stream_or_context, 'cryptal', $option, $value);
-
-
-To retrieve the current value for an option,
-use ``stream_context_get_options()``:
-
-..  sourcecode:: inline-php
-
-    $options = stream_context_get_options($stream_or_context);
-    $padding = $options['cryptal']['padding'];
-    echo "Padding scheme in use: " . get_class($padding) . PHP_EOL;
 
 Padding
 ~~~~~~~
 
-By default, no padding is applied (ie. the padding scheme is set to
-an instance of ``fpoirotte\Cryptal\Padding\None``) when using streams.
+By default, no padding is applied to streams (ie. the padding scheme
+is set to an instance of ``fpoirotte\Cryptal\Padding\None``).
 
 If you need to use another padding scheme, you can easily swap the default
-for an alternate implementation. Just set the ``padding`` context option
-to an instance of the padding scheme to use before opening the stream:
+for an alternate implementation. Just set the ``padding`` filter parameter
+to an instance of the padding scheme to use when adding the filter:
 
 ..  sourcecode:: inline-php
 
     use fpoirotte\Cryptal\Padding\AnsiX923;
 
-    $ctx = stream_context_create(
+    // Open the stream
+    $stream = fopen(..., 'wb');
+
+    stream_filter_append(
+        $stream,
+        'cryptal.encrypt',
+        STREAM_FILTER_WRITE,
         array(
-            'cryptal' => array(
                 'key'       => '0123456789abcdef',
                 'IV'        => 'abcdef0123456789',
+                'algorithm' => CipherEnum::CIPHER_AES_128(),
+                'mode'      => ModeEnum::MODE_CTR(),
 
-                // Use the ANSI X.923 padding scheme instead of PKCS#7.
+                // Use the ANSI X.923 padding scheme.
                 'padding'   => new AnsiX923,
-            )
         )
     );
 
-    $encrypt = fopen("cryptal.encrypt://MODE_CTR/CIPHER_AES_128", 'w+', false, $ctx);
     // Do something with the stream...
 
 
@@ -300,8 +324,11 @@ Associated Data (AEAD):
 Hashes (message digests)
 ========================
 
-Using streams
--------------
+Using stream filters
+--------------------
+
+Replicating ``md5_file()`` using Cryptal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Hashing data using streams is really easy. For example, to obtain an MD5
 message digest for a file (similar to what the PHP ``md5_file()`` function
@@ -312,16 +339,80 @@ returns), the following snippet can be used:
     // Initialize the library
     \fpoirotte\Cryptal::init();
 
-    // Open the hashing stream & a regular file stream.
-    $hashStream = fopen("cryptal.hash://HASH_MD5", 'w+b');
-    $fileStream = fopen("/path/to/some.data", "rb");
+    // Open the binary file for reading.
+    $fp = fopen("/path/to/some.data", "rb");
 
-    // Pass data from the file to the hashing stream.
-    stream_copy_to_stream($fileStream, $hashStream);
+    // Add the hashing filter to the stream.
+    stream_filter_append(
+        $fp,
+        'cryptal.hash',
+        // We want to compute the hash based on data read from the file.
+        STREAM_FILTER_READ,
+        array(
+            'algorithm' => HashEnum::HASH_MD5()
+        )
+    );
 
     // Read the resulting message digest (returned in raw form).
     // The MD5 algorithm produces a 128-bit hash (16 bytes).
-    $hash = fread($hashStream, 16);
+    $hash = stream_get_contents($fp);
+
+..  waning::
+
+    When adding the filter, the 3rd argument to ``stream_filter_append()``
+    (``$read_write``) should be set to either ``STREAM_FILTER_WRITE``
+    if the hashing should happen during writes (eg. via ``fwrite()``),
+    or ``STREAM_FILTER_READ`` if it should happen during reads (eg. via
+    ``fread()`` or ``fgets()``).
+
+    Using the default value (``STREAM_FILTER_ALL``) means the same filter
+    is applied to both operations, which is not supported and may produce
+    unexpected results.
+
+
+Filter parameters for ``cryptal.hash``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using streams, the following options may be used when adding the filter
+to control the way the message digest is computed:
+
+..  list-table:: Parameters for cryptal.hash
+    :widths: 10 5 35 50
+    :header-rows: 1
+
+    *   - Name
+        - Optional
+        - Expected type
+        - Description
+
+    *   - ``algorithm``
+        - yes
+        - ``\fpoirotte\Cryptal\HashEnum``
+        - The algorithm to use to hash the data.
+
+          This parameter is important as the various algorithms offer different
+          security garantees. Make sure you have read documentation on the
+          various algorithms and their limitations before setting this value.
+
+    *   - ``allowUnsafe``
+        - no
+        - boolean
+        - Whether userland PHP implementations may be used or not.
+          Defaults to ``false``.
+
+          While those implementations add support for some rarely used
+          algorithms, they are usually way slower than implementations
+          based on PHP extensions.
+
+          Also, those implementations are considered unsafe because they cannot
+          protect the application from certain classes of attacks like
+          PHP extensions usually do (eg. side-channel attacks).
+
+          Last but not least, when using those implementations, secret values
+          may reside in memory for longer than is actually necessary
+          (possibly even longer than the program's actual execution time),
+          making them vulnerable to memory forensic techniques and such.
+
 
 Using the registry
 ------------------
@@ -386,8 +477,11 @@ less predictable.
 Before computing any MAC, we suggest that you get some documentation first
 on whatever algorithm you are planning to use to know its requirements.
 
-Using streams
--------------
+Using stream filters
+--------------------
+
+Quick example: HMAC-MD5 on a file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To compute a MAC using the stream interface, just use code similar to this one:
 
@@ -396,27 +490,111 @@ To compute a MAC using the stream interface, just use code similar to this one:
     // Initialize the library
     \fpoirotte\Cryptal::init();
 
-    // Create a MAC context, holding the secret key
-    $ctx = stream_context_create(
+    // Open the binary file for reading.
+    $macGiver = fopen("/path/to/some.data", "rb");
+
+    // Add the hashing filter to the stream.
+    stream_filter_append(
+        $macGiver,
+        'cryptal.mac',
+        // We want to compute the MAC based on data read from the file.
+        STREAM_FILTER_READ,
         array(
-            'cryptal' => array(
-                // Secret key.
-                // Size must be compatible with the algorithms used.
-                'key'   => '0123456789abcdef',
-            )
+            'algorithm'         => MacEnum::MAC_HMAC(),
+            'innerAlgorithm'    => HashEnum::HASH_MD5(),
+
+            // Size must be compatible with the algorithms in use.
+            'key'               => '0123456789abcdef',
         )
     );
 
-    // Open the MAC stream & a regular file stream.
-    $macGiver   = fopen("cryptal.mac://MAC_HMAC/HASH_MD5", 'w+b', false, $ctx);
-    $fileStream = fopen("/path/to/some.data", "rb");
-
-    // Pass data from the file to the MAC stream.
-    stream_copy_to_stream($fileStream, $macGiver);
-
     // Retrieve the Message Authentication Code in raw binary form.
     // The HMAC-MD5 algorithm produces a 128-bit hash (16 bytes).
-    $hash = fread($macGiver, 16);
+    $mac = stream_get_contents($macGiver);
+
+
+..  warning::
+
+    When adding the filter, the 3rd argument to ``stream_filter_append()``
+    (``$read_write``) should be set to either ``STREAM_FILTER_WRITE``
+    if the tag computation should happen during writes (eg. via ``fwrite()``),
+    or ``STREAM_FILTER_READ`` if it should happen during reads (eg. via
+    ``fread()`` or ``fgets()``).
+
+    Using the default value (``STREAM_FILTER_ALL``) means the same filter
+    is applied to both operations, which is not supported and may produce
+    unexpected results.
+
+
+Filter parameters for ``cryptal.mac``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using streams, the following options may be used when adding the filter
+to control the way the message authentication code is computed:
+
+..  list-table:: Parameters for cryptal.mac
+    :widths: 10 5 35 50
+    :header-rows: 1
+
+    *   - Name
+        - Optional
+        - Expected type
+        - Description
+
+    *   - ``algorithm``
+        - yes
+        - ``\fpoirotte\Cryptal\MacEnum``
+        - Outer algorithm to use to perform the computation.
+
+          This parameter is important as the various algorithms offer different
+          security garantees. Make sure you have read documentation on the
+          various algorithms and their limitations before setting this value.
+
+    *   - ``innerAlgorithm``
+        - yes
+        - ``\fpoirotte\Cryptal\SubAlgorithmAbstractEnum``
+        - Inner algorithm to use to perform the computation.
+
+          Depending on the selected ``algorithm``, this parameter should be set
+          to either an instance of ``\fpoirotte\Cryptal\CipherEnum`` or
+          ``\fpoirotte\Cryptal\HashEnum``.
+
+          This parameter is important as the various algorithms offer different
+          security garantees. Make sure you have read documentation on the
+          various algorithms and their limitations before setting this value.
+
+    *   - ``allowUnsafe``
+        - no
+        - boolean
+        - Whether userland PHP implementations may be used or not.
+          Defaults to ``false``.
+
+          While those implementations add support for some rarely used
+          algorithms, they are usually way slower than implementations
+          based on PHP extensions.
+
+          Also, those implementations are considered unsafe because they cannot
+          protect the application from certain classes of attacks like
+          PHP extensions usually do (eg. side-channel attacks).
+
+          Last but not least, when using those implementations, secret values
+          may reside in memory for longer than is actually necessary
+          (possibly even longer than the program's actual execution time),
+          making them vulnerable to memory forensic techniques and such.
+
+    *   - ``nonce``
+        - yes/no
+        - string
+        - Nonce to make the output less predictable.
+          Whether this parameter is optional or not depends on the
+          selected ``algorithm``/``innerAlgorithm``.
+
+    *   - ``key``
+        - yes
+        - string
+        - Symmetric key to use for the computation
+
+
 
 Using the registry
 ------------------

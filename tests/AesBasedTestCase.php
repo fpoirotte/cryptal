@@ -5,6 +5,8 @@ namespace fpoirotte\Cryptal\Tests;
 use fpoirotte\Cryptal\Padding\None;
 use fpoirotte\Cryptal\ModeEnum;
 use fpoirotte\Cryptal\CipherEnum;
+use fpoirotte\Cryptal\ImplementationTypeEnum;
+use fpoirotte\Cryptal\Registry;
 
 abstract class AesBasedTestCase extends \PHPUnit\Framework\TestCase
 {
@@ -13,6 +15,24 @@ abstract class AesBasedTestCase extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass()
     {
         self::$cache = array();
+
+        // Initialize the library.
+        \fpoirotte\Cryptal::init();
+
+        $registry = Registry::getInstance();
+        $registry->reset()->registerDefaultAlgorithms()->addCipher(
+            '',
+            '\\fpoirotte\\Cryptal\\Tests\\AesEcbStub',
+            CipherEnum::CIPHER_AES_128(),
+            ModeEnum::MODE_ECB(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
+    }
+
+    public static function tearDownAfterClass()
+    {
+        $registry = Registry::getInstance();
+        $registry->reset()->load(true);
     }
 
     public function getCipher($key)

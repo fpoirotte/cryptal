@@ -78,6 +78,7 @@ class Registry
             throw new \InvalidArgumentException("$cls does not implement $iface");
         }
         $this->metadata['crypt']["$cipher:$mode"][] = array($packageName, $cls, $type);
+        return $this;
     }
 
     public function addHash($packageName, $cls, HashEnum $algo, ImplementationTypeEnum $type)
@@ -88,6 +89,7 @@ class Registry
             throw new \InvalidArgumentException("$cls does not implement $iface");
         }
         $this->metadata['hash']["$algo"][] = array($packageName, $cls, $type);
+        return $this;
     }
 
     public function addMac($packageName, $cls, MacEnum $algo, ImplementationTypeEnum $type)
@@ -98,6 +100,7 @@ class Registry
             throw new \InvalidArgumentException("$cls does not implement $iface");
         }
         $this->metadata['mac']["$algo"][] = array($packageName, $cls, $type);
+        return $this;
     }
 
     public function removeAlgorithms($packageName)
@@ -111,6 +114,7 @@ class Registry
                 }
             }
         }
+        return $this;
     }
 
     public function load($registerDefaultAlgorithms = true)
@@ -124,84 +128,103 @@ class Registry
         }
 
         if ($registerDefaultAlgorithms) {
-            // Ciphers
-            $this->addCipher(
-                '',
-                'fpoirotte\\Cryptal\\DefaultAlgorithms\\ChaCha20Openssh',
-                CipherEnum::CIPHER_CHACHA20_OPENSSH(),
-                ModeEnum::MODE_ECB(),
-                ImplementationTypeEnum::TYPE_USERLAND()
-            );
-            $this->addCipher(
-                '',
-                'fpoirotte\\Cryptal\\DefaultAlgorithms\\ChaCha20',
-                CipherEnum::CIPHER_CHACHA20(),
-                ModeEnum::MODE_ECB(),
-                ImplementationTypeEnum::TYPE_USERLAND()
-            );
-            $camellia = array(
-                CipherEnum::CIPHER_CAMELIA_128(),
-                CipherEnum::CIPHER_CAMELIA_192(),
-                CipherEnum::CIPHER_CAMELIA_256(),
-            );
-            foreach ($camellia as $cipher) {
-                $this->addCipher(
-                    '',
-                    'fpoirotte\\Cryptal\\DefaultAlgorithms\\Camellia',
-                    $cipher,
-                    ModeEnum::MODE_ECB(),
-                    ImplementationTypeEnum::TYPE_USERLAND()
-                );
-            }
-
-            // Hashes
-            $algos = array(
-                HashEnum::HASH_CRC32(),
-                HashEnum::HASH_MD5(),
-                HashEnum::HASH_SHA1(),
-            );
-            foreach ($algos as $algo) {
-                $this->addHash(
-                    '',
-                    'fpoirotte\\Cryptal\\DefaultAlgorithms\\Hash',
-                    $algo,
-                    ImplementationTypeEnum::TYPE_COMPILED()
-                );
-            }
-
-            // MACs
-            $this->addMac(
-                '',
-                'fpoirotte\\Cryptal\\DefaultAlgorithms\\Cmac',
-                MacEnum::MAC_CMAC(),
-                ImplementationTypeEnum::TYPE_USERLAND()
-            );
-            $this->addMac(
-                '',
-                'fpoirotte\\Cryptal\\DefaultAlgorithms\\Poly1305',
-                MacEnum::MAC_POLY1305(),
-                ImplementationTypeEnum::TYPE_USERLAND()
-            );
-            $algos = array(
-                MacEnum::MAC_UMAC_32(),
-                MacEnum::MAC_UMAC_64(),
-                MacEnum::MAC_UMAC_96(),
-                MacEnum::MAC_UMAC_128(),
-            );
-            foreach ($algos as $algo) {
-                $this->addMac(
-                    '',
-                    'fpoirotte\\Cryptal\\DefaultAlgorithms\\Umac',
-                    $algo,
-                    ImplementationTypeEnum::TYPE_USERLAND()
-                );
-            }
+            $this->registerDefaultAlgorithms();
         }
+        return $this;
+    }
+
+    public function registerDefaultAlgorithms()
+    {
+        // Ciphers
+        $this->addCipher(
+            '',
+            'fpoirotte\\Cryptal\\DefaultAlgorithms\\ChaCha20Openssh',
+            CipherEnum::CIPHER_CHACHA20_OPENSSH(),
+            ModeEnum::MODE_ECB(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
+        $this->addCipher(
+            '',
+            'fpoirotte\\Cryptal\\DefaultAlgorithms\\ChaCha20',
+            CipherEnum::CIPHER_CHACHA20(),
+            ModeEnum::MODE_ECB(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
+        $camellia = array(
+            CipherEnum::CIPHER_CAMELIA_128(),
+            CipherEnum::CIPHER_CAMELIA_192(),
+            CipherEnum::CIPHER_CAMELIA_256(),
+        );
+        foreach ($camellia as $cipher) {
+            $this->addCipher(
+                '',
+                'fpoirotte\\Cryptal\\DefaultAlgorithms\\Camellia',
+                $cipher,
+                ModeEnum::MODE_ECB(),
+                ImplementationTypeEnum::TYPE_USERLAND()
+            );
+        }
+
+        // Hashes
+        $algos = array(
+            HashEnum::HASH_CRC32(),
+            HashEnum::HASH_MD5(),
+            HashEnum::HASH_SHA1(),
+        );
+        foreach ($algos as $algo) {
+            $this->addHash(
+                '',
+                'fpoirotte\\Cryptal\\DefaultAlgorithms\\Hash',
+                $algo,
+                ImplementationTypeEnum::TYPE_COMPILED()
+            );
+        }
+
+        // MACs
+        $this->addMac(
+            '',
+            'fpoirotte\\Cryptal\\DefaultAlgorithms\\Cmac',
+            MacEnum::MAC_CMAC(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
+        $this->addMac(
+            '',
+            'fpoirotte\\Cryptal\\DefaultAlgorithms\\Poly1305',
+            MacEnum::MAC_POLY1305(),
+            ImplementationTypeEnum::TYPE_USERLAND()
+        );
+        $algos = array(
+            MacEnum::MAC_UMAC_32(),
+            MacEnum::MAC_UMAC_64(),
+            MacEnum::MAC_UMAC_96(),
+            MacEnum::MAC_UMAC_128(),
+        );
+        foreach ($algos as $algo) {
+            $this->addMac(
+                '',
+                'fpoirotte\\Cryptal\\DefaultAlgorithms\\Umac',
+                $algo,
+                ImplementationTypeEnum::TYPE_USERLAND()
+            );
+        }
+
+        return $this;
     }
 
     public function save()
     {
         file_put_contents(self::$path, serialize($this->metadata));
+        return $this;
+    }
+
+    public function reset()
+    {
+        $this->metadata = array(
+            'crypt' => array(),
+            'hash'  => array(),
+            'mac'   => array(),
+        );
+        return $this;
     }
 
     protected static function findCipher(CipherEnum $cipher, ModeEnum $mode, $allowUnsafe)
@@ -346,15 +369,6 @@ class Registry
 
         $cls = self::findMac($algo, $allowUnsafe);
         return new $cls($algo, $subAlgo, $key, $nonce);
-    }
-
-    public function reset()
-    {
-        $this->metadata = array(
-            'crypt' => array(),
-            'hash'  => array(),
-            'mac'   => array(),
-        );
     }
 
     public function getSupportedCiphers()

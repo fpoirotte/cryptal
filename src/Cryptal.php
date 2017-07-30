@@ -28,16 +28,18 @@ class Cryptal
             return false;
         }
 
-        $streams = array(
-            'cryptal.encrypt'   => "\\fpoirotte\Cryptal\\Streams\\Crypto",
-            'cryptal.decrypt'   => "\\fpoirotte\Cryptal\\Streams\\Crypto",
-            'cryptal.hash'      => "\\fpoirotte\Cryptal\\Streams\\Hash",
-            'cryptal.mac'       => "\\fpoirotte\Cryptal\\Streams\\Mac",
+        $filters = array(
+            'cryptal.binify'    => "\\fpoirotte\Cryptal\\Filters\\Binify",
+            'cryptal.hexify'    => "\\fpoirotte\Cryptal\\Filters\\Hexify",
+            'cryptal.encrypt'   => "\\fpoirotte\Cryptal\\Filters\\Crypto",
+            'cryptal.decrypt'   => "\\fpoirotte\Cryptal\\Filters\\Crypto",
+            'cryptal.hash'      => "\\fpoirotte\Cryptal\\Filters\\Hash",
+            'cryptal.mac'       => "\\fpoirotte\Cryptal\\Filters\\Mac",
         );
 
-        foreach ($streams as $stream => $cls) {
-            if (!stream_wrapper_register($stream, $cls)) {
-                throw new \Exception("Failed to register '$stream' stream wrapper");
+        foreach ($filters as $filter => $cls) {
+            if (!stream_filter_register($filter, $cls)) {
+                throw new \Exception("Failed to register '$filter' stream filter");
             }
         }
 

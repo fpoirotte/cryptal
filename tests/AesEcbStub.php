@@ -9,6 +9,10 @@ use fpoirotte\Cryptal\PaddingInterface;
 use fpoirotte\Cryptal\CipherEnum;
 use fpoirotte\Cryptal\ModeEnum;
 
+/**
+ * See http://testprotect.com/appendix/AEScalc for an easy way
+ * to get the values online.
+ */
 class AesEcbStub implements CryptoInterface
 {
     protected   $map;

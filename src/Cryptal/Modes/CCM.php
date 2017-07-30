@@ -91,15 +91,11 @@ class CCM implements AsymmetricModeInterface
     /// Increment the value of the counter by one.
     protected function incrementCounter($c)
     {
+        $carry = 1;
         for ($i = $this->L - 1; $i >= 0; $i--) {
             // chr() takes care of overflows automatically.
-            $c[$i] = chr(ord($c[$i]) + 1);
-
-            // Stop, unless the incremented generated an overflow.
-            // In that case, we continue to propagate the carry.
-            if ("\x00" !== $c[$i]) {
-                break;
-            }
+            $c[$i] = chr(ord($c[$i]) + $carry);
+            $carry &= ("\x00" === $c[$i]);
         }
         return $c;
     }

@@ -71,7 +71,7 @@ class PaddingTest extends TestCase
     /**
      * @dataProvider paddingProvider
      */
-    public function testPadding($bufferSize, $scheme, $expected)
+    public function testPaddingWithScheme($bufferSize, $scheme, $expected)
     {
         $this->assertSame(
             bin2hex($expected),

@@ -17,7 +17,7 @@ Also, very few of those extensions support on-the-fly encryption/decryption.
 
 Cryptal was created to work around these issues by providing a unified
 interface & transparent support for on-the-fly encryption/decryption
-using stream wrappers.
+using stream filters.
 
 .. vim: ts=4 et
 
