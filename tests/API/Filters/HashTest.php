@@ -7,12 +7,6 @@ use fpoirotte\Cryptal\HashEnum;
 
 class HashTest extends TestCase
 {
-    public function setUp()
-    {
-        // Initialize the library.
-        \fpoirotte\Cryptal::init();
-    }
-
     public function vectors()
     {
         $data = "hello world!\n";

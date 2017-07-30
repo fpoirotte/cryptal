@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class BinifyTest extends TestCase
 {
-    public function setUp()
-    {
-        // Initialize the library.
-        \fpoirotte\Cryptal::init();
-    }
-
     public function testValidData()
     {
         $expected   = "hello world!\n";

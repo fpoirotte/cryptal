@@ -8,12 +8,6 @@ use fpoirotte\Cryptal\Registry;
 
 class HashTest extends TestCase
 {
-    public function setUp()
-    {
-        // Initialize the library.
-        \fpoirotte\Cryptal::init();
-    }
-
     public function provider()
     {
         // Run a few tests against known test vectors.

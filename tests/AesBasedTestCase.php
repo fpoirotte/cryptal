@@ -16,9 +16,6 @@ abstract class AesBasedTestCase extends \PHPUnit\Framework\TestCase
     {
         self::$cache = array();
 
-        // Initialize the library.
-        \fpoirotte\Cryptal::init();
-
         $registry = Registry::getInstance();
         $registry->reset()->registerDefaultAlgorithms()->addCipher(
             '',
