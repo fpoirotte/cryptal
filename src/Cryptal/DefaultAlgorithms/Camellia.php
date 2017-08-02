@@ -275,7 +275,7 @@ class Camellia implements CryptoInterface
      *      A number between 1 and 4 indicating the sbox
      *      from which the resulting value will be taken.
      *
-     * \param string
+     * \param string $x
      *      A single character indicating the index
      *      in the sbox whose value should be returned.
      *
