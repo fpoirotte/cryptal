@@ -635,18 +635,18 @@ Computing a MAC using the registry is very similar to hashing:
 Miscelleanous features
 ======================
 
-In addition to the filters listed above, Cryptal provides the following
+In addition to the filters listed above, Cryptal also provides the following
 filters:
 
 *   ``cryptal.binify`` can be used to convert an hexadecimal-encoded string
     into its binary counterpart on the fly
     (eg. ``4372797074616c`` -> ``Cryptal``).
-    It accepts a single option named ``uppercase``. When set to ``true``,
-    the filter will generate its output in uppercase characters.
 
 *   ``cryptal.hexify`` does the reverse operation and can be used to convert
     a string into its hexadecimal representation
-    (eg. ``Cryptal`` -> ``4372797074616c``)
+    (eg. ``Cryptal`` -> ``4372797074616c``).
+    It accepts a single option named ``uppercase``. When set to ``true``,
+    the filter will generate its output in uppercase characters.
 
 
 .. vim: ts=4 et
