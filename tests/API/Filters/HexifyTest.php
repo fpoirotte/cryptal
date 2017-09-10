@@ -10,7 +10,7 @@ class HexifyTest extends TestCase
     {
         $input      = "hello world!\n";
         $expected   = bin2hex($input);
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append($stream, 'cryptal.hexify', STREAM_FILTER_READ);
         fwrite($stream, $input);
         fseek($stream, 0, SEEK_SET);
@@ -21,7 +21,7 @@ class HexifyTest extends TestCase
     {
         $input      = "hello world!\n";
         $expected   = strtoupper(bin2hex($input));
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append($stream, 'cryptal.hexify', STREAM_FILTER_READ, array('uppercase' => true));
         fwrite($stream, $input);
         fseek($stream, 0, SEEK_SET);

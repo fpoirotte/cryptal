@@ -23,7 +23,7 @@ class HashTest extends TestCase
      */
     public function testFilterFor($algorithm, $data, $expected)
     {
-        $stream     = fopen("php://memory", "w+b");
+        $stream = tmpfile();
         stream_filter_append($stream, 'cryptal.hash', STREAM_FILTER_READ, array('algorithm' => $algorithm));
         fwrite($stream, $data);
         fseek($stream, 0, SEEK_SET);

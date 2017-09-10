@@ -12,7 +12,7 @@ class MacTest extends AesBasedTestCase
     {
         // This test vector was verified against http://adder.demo.iworks.ro/Go/OMAC/
         $expected   = 'a9a5079a7e416683be1e24ddca8d22a2';
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append(
             $stream,
             'cryptal.mac',

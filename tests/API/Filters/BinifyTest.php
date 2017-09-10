@@ -10,7 +10,7 @@ class BinifyTest extends TestCase
     {
         $expected   = "hello world!\n";
         $input      = bin2hex($expected);
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append($stream, 'cryptal.binify', STREAM_FILTER_READ);
         fwrite($stream, $input);
         fseek($stream, 0, SEEK_SET);
@@ -24,7 +24,7 @@ class BinifyTest extends TestCase
     public function testInvalidByte()
     {
         $input      = "ZZ";
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append($stream, 'cryptal.binify', STREAM_FILTER_READ);
         fwrite($stream, $input);
         fseek($stream, 0, SEEK_SET);
@@ -35,10 +35,10 @@ class BinifyTest extends TestCase
      * @expectedException           RuntimeException
      * @expectedExceptionMessage    Odd number of bytes in input
      */
-    public function testOddNumberOfButes()
+    public function testOddNumberOfBytes()
     {
         $input      = "303";
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append($stream, 'cryptal.binify', STREAM_FILTER_READ);
         fwrite($stream, $input);
         fseek($stream, 0, SEEK_SET);

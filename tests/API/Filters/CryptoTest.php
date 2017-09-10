@@ -94,7 +94,7 @@ class CryptoTest extends AesBasedTestCase
         $key    = pack('H*', $key);
 
         // Test the encryption
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append(
             $stream,
             'cryptal.encrypt',
@@ -116,7 +116,7 @@ class CryptoTest extends AesBasedTestCase
         $this->assertSame($ciphertext, bin2hex(stream_get_contents($stream)));
 
         // And decryption too
-        $stream     = fopen("php://memory", "w+b");
+        $stream     = tmpfile();
         stream_filter_append(
             $stream,
             'cryptal.decrypt',
