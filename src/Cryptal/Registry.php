@@ -167,7 +167,6 @@ class Registry
 
         // Hashes
         $algos = array(
-            HashEnum::HASH_CRC32(),
             HashEnum::HASH_MD5(),
             HashEnum::HASH_SHA1(),
         );
