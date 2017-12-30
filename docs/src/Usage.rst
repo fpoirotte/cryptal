@@ -357,7 +357,7 @@ returns), the following snippet can be used:
     // The MD5 algorithm produces a 128-bit hash (16 bytes).
     $hash = stream_get_contents($fp);
 
-..  waning::
+..  warning::
 
     When adding the filter, the 3rd argument to ``stream_filter_append()``
     (``$read_write``) should be set to either ``STREAM_FILTER_WRITE``

@@ -167,7 +167,7 @@ Available plugins
 -----------------
 
 You can browse the list of existing plugins for Cryptal on
-`Packagist <https://packagist.org/providers/fpoirotte/cryptal-implementation>`_
+`this page <https://packagist.org/providers/fpoirotte/cryptal-implementation>`_
 
 .. vim: ts=4 et
 
