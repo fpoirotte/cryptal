@@ -474,8 +474,9 @@ known only by the two parties trying to prevent any message tampering.
 A few algorithms also require what's known as a "nonce", to make the output
 less predictable.
 
-Before computing any MAC, we suggest that you get some documentation first
-on whatever algorithm you are planning to use to know its requirements.
+Before computing any MAC, we suggest that you first read some documentation
+about whatever algorithm you plan on using and then learn about its specific
+requirements and limitations.
 
 Using stream filters
 --------------------
@@ -493,7 +494,7 @@ To compute a MAC using the stream interface, just use code similar to this one:
     // Open the binary file for reading.
     $macGiver = fopen("/path/to/some.data", "rb");
 
-    // Add the hashing filter to the stream.
+    // Add the MAC filter to the stream.
     stream_filter_append(
         $macGiver,
         'cryptal.mac',
@@ -635,7 +636,7 @@ Computing a MAC using the registry is very similar to hashing:
 Miscelleanous features
 ======================
 
-In addition to the filters listed above, Cryptal also provides the following
+In addition to the ones listed above, Cryptal also provides the following
 filters:
 
 *   ``cryptal.binify`` can be used to convert an hexadecimal-encoded string
@@ -646,7 +647,8 @@ filters:
     a string into its hexadecimal representation
     (eg. ``Cryptal`` -> ``4372797074616c``).
     It accepts a single option named ``uppercase``. When set to ``true``,
-    the filter will generate its output in uppercase characters.
+    the filter will generate its output using uppercase characters instead
+    of the (default) lowercase characters.
 
 
 .. vim: ts=4 et

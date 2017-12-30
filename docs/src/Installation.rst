@@ -86,7 +86,7 @@ Cipher algorithms
         -   compiled
         -   compiled
         -   compiled
-        -   compiled [#]_
+        -   compiled [#aes_sodium]_
         -   n/a
         -   compiled
 
@@ -103,7 +103,7 @@ Cipher algorithms
         -   PHP code
         -   n/a
         -   compiled
-        -   n/a
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   n/a
         -   n/a
         -   compiled
@@ -112,7 +112,7 @@ Cipher algorithms
         -   PHP code
         -   n/a
         -   compiled
-        -   n/a
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   n/a
         -   n/a
         -   compiled
@@ -121,7 +121,7 @@ Cipher algorithms
         -   PHP code
         -   n/a
         -   compiled
-        -   n/a
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   n/a
         -   n/a
         -   compiled
@@ -139,7 +139,7 @@ Cipher algorithms
         -   PHP code
         -   n/a
         -   n/a
-        -   n/a
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   compiled
         -   n/a
         -   n/a
@@ -175,7 +175,7 @@ Cipher algorithms
         -   n/a
         -   compiled
         -   compiled
-        -   compiled
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   n/a
         -   n/a
         -   compiled
@@ -198,12 +198,6 @@ Cipher algorithms
         -   n/a
         -   compiled
 
-..  [#] libsodium only supports AES-256 in GCM mode.
-        Also, this cipher/mode combination is not available
-        unless the processor of the machine running the code
-        has support for the AES-NI instruction set.
-
-
 Hashing algorithms
 ~~~~~~~~~~~~~~~~~~
 
@@ -219,15 +213,6 @@ Hashing algorithms
         -   LibSodium
         -   Hash
         -   PHP-Crypto
-
-    *   -   CRC32
-        -   compiled
-        -   n/a
-        -   n/a
-        -   n/a
-        -   n/a
-        -   compiled
-        -   n/a
 
     *   -   MD2
         -   n/a
@@ -348,7 +333,7 @@ Message authentication algorithms
         -   PHP code
         -   n/a
         -   n/a
-        -   n/a
+        -   compiled [#tomcrypt_1_18]_ [#php_tomcrypt_0_3_0]_
         -   n/a
         -   n/a
         -   n/a
@@ -416,5 +401,17 @@ to install the appropriate plugins:
     $
     $ # Plugin based on the PHP-Crypto extension
     $ php composer.php require fpoirotte/cryptal-php-crypto
+
+..  [#aes_sodium]
+    libsodium only supports AES-256 in GCM mode.
+    Also, this cipher/mode combination is not available
+    unless the processor of the machine running the code
+    has support for the AES-NI instruction set.
+
+..  [#php_tomcrypt_0_3_0]
+    Requires version 0.3.0 or later of the PHP tomcrypt extension.
+
+..  [#tomcrypt_1_18]
+    Requires version 1.18 or later of LibTomCrypt.
 
 .. vim: ts=4 et
