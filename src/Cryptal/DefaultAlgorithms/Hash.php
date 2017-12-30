@@ -13,7 +13,6 @@ class Hash extends AbstractHash
     public function __construct(HashEnum $algorithm)
     {
         $supported = array(
-            'crc32' => HashEnum::HASH_CRC32(),
             'md5'   => HashEnum::HASH_MD5(),
             'sha1'  => HashEnum::HASH_SHA1(),
         );
@@ -34,13 +33,6 @@ class Hash extends AbstractHash
 
     protected function internalFinalize()
     {
-        $func = $this->func;
-
-        if ('crc32' === $func) {
-            // For historical reasons, CRC32 is a bit of an oddball.
-            return pack('H*', sprintf('%x', crc32($this->data)));
-        }
-
-        return call_user_func($func, $this->data, true);
+        return call_user_func($this->func, $this->data, true);
     }
 }
