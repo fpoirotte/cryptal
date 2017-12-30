@@ -3,6 +3,16 @@ Cryptal
 
 Cryptal is a Cryptography Abstraction Layer for PHP.
 
+..  only:: devel
+
+    ..  warning::
+
+        This documentation was automatically built from the latest changes
+        in |this_commit|_.
+        It does not necessarily reflect features from any current or
+        upcoming release. Check out https://readthedocs.org/projects/cryptal/
+        for documentation on supported versions.
+
 This project is comprised of a unified API, which serves as an abstraction
 layer for various cryptographic libraries, and plugins which add support
 for the various cryptography primitives.
