@@ -402,16 +402,18 @@ to install the appropriate plugins:
     $ # Plugin based on the PHP-Crypto extension
     $ php composer.php require fpoirotte/cryptal-php-crypto
 
+..  rubric:: Footnotes
+
 ..  [#aes_sodium]
     libsodium only supports AES-256 in GCM mode.
     Also, this cipher/mode combination is not available
     unless the processor of the machine running the code
     has support for the AES-NI instruction set.
 
-..  [#php_tomcrypt_0_3_0]
-    Requires version 0.3.0 or later of the PHP tomcrypt extension.
-
 ..  [#tomcrypt_1_18]
     Requires version 1.18 or later of LibTomCrypt.
+
+..  [#php_tomcrypt_0_3_0]
+    Requires version 0.3.0 or later of the PHP tomcrypt extension.
 
 .. vim: ts=4 et
