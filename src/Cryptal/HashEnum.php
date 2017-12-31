@@ -25,14 +25,26 @@ final class HashEnum extends SubAlgorithmAbstractEnum
     private $HASH_SHA1;
 
     /// Secure Hash Algorithm 2 (224 bit hashes)
-    private $HASH_SHA224;
+    private $HASH_SHA2_224;
 
     /// Secure Hash Algorithm 2 (256 bit hashes)
-    private $HASH_SHA256;
+    private $HASH_SHA2_256;
 
     /// Secure Hash Algorithm 2 (384 bit hashes)
-    private $HASH_SHA384;
+    private $HASH_SHA2_384;
 
     /// Secure Hash Algorithm 2 (512 bit hashes)
-    private $HASH_SHA512;
+    private $HASH_SHA2_512;
+
+    /// Secure Hash Algorithm 3 (224 bit hashes)
+    private $HASH_SHA3_224;
+
+    /// Secure Hash Algorithm 3 (256 bit hashes)
+    private $HASH_SHA3_256;
+
+    /// Secure Hash Algorithm 3 (384 bit hashes)
+    private $HASH_SHA3_384;
+
+    /// Secure Hash Algorithm 3 (512 bit hashes)
+    private $HASH_SHA3_512;
 }
