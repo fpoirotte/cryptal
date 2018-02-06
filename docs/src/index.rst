@@ -36,6 +36,7 @@ Contents:
 
 Badges: |badges-travis| |badges-coveralls| |badges-hhvm|
 
+..  : End of document.
 ..  |badges-travis| image:: https://travis-ci.org/fpoirotte/cryptal.svg?branch=master
     :alt: Travis-CI (unknown)
     :target: http://travis-ci.org/fpoirotte/cryptal
@@ -48,6 +49,7 @@ Badges: |badges-travis| |badges-coveralls| |badges-hhvm|
     :alt: Tested on HHVM (unknown)
     :target: https://php-eye.com/package/fpoirotte/cryptal
 
+..  |this_commit| replace:: GitHub
 ..  |---| unicode:: U+02014 .. em dash
     :trim:
 
