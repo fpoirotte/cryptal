@@ -38,6 +38,104 @@ underlying library supports.
 The actual supported algorithms may vary due to differing compilation options
 or differing versions being used.
 
+Modes of operation
+~~~~~~~~~~~~~~~~~~
+
+..  list-table::
+    :header-rows: 1
+    :stub-columns: 1
+
+    *   -   Algorithm
+        -   Core
+        -   Mcrypt
+        -   OpenSSL
+        -   LibTomCrypt
+        -   LibSodium
+        -   Hash
+        -   PHP-Crypto
+
+    *   -   CBC
+        -   PHP code
+        -   compiled
+        -   compiled
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
+    *   -   CCM
+        -   PHP code
+        -   n/a
+        -   compiled [#openssl_options]_
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
+
+    *   -   CFB
+        -   PHP code
+        -   compiled
+        -   compiled
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
+    *   -   CTR
+        -   PHP code
+        -   compiled
+        -   compiled [#openssl_options]_
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
+    *   -   EAX
+        -   PHP code
+        -   n/a
+        -   n/a
+        -   compiled
+        -   n/a
+        -   n/a
+        -   n/a
+
+    *   -   ECB
+        -   PHP code
+        -   compiled
+        -   compiled
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
+    *   -   GCM
+        -   PHP code
+        -   n/a
+        -   compiled [#openssl_options]_
+        -   compiled
+        -   compiled [#aes_sodium]_
+        -   n/a
+        -   compiled
+
+    *   -   OCB
+        -   PHP code
+        -   n/a
+        -   compiled [#openssl_options]_
+        -   compiled
+        -   n/a
+        -   n/a
+        -   n/a
+
+    *   -   OFB
+        -   PHP code
+        -   compiled
+        -   compiled
+        -   compiled
+        -   n/a
+        -   n/a
+        -   compiled
+
 Cipher algorithms
 ~~~~~~~~~~~~~~~~~
 
@@ -403,6 +501,10 @@ to install the appropriate plugins:
     $ php composer.php require fpoirotte/cryptal-php-crypto
 
 ..  rubric:: Footnotes
+
+..  [#openssl_options]
+    Availability is highly dependent on OpenSSL version, hardware,
+    compilation options and selected cipher. Your mileage may vary.
 
 ..  [#aes_sodium]
     libsodium only supports AES-256 in GCM mode.
